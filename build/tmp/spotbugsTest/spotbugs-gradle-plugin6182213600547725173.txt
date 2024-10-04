@@ -1,8 +1,0 @@
-/Users/chenchu/Desktop/ASU/SER515/Group Project/ser515-lambda/build/classes/java/test/com/groupesan/project/java/scrumsimulator/mainpackage/impl/ScrumRoleFactoryTest.class
-/Users/chenchu/Desktop/ASU/SER515/Group Project/ser515-lambda/build/classes/java/test/com/groupesan/project/java/scrumsimulator/mainpackage/impl/UserStoryTest.class
-/Users/chenchu/Desktop/ASU/SER515/Group Project/ser515-lambda/build/classes/java/test/com/groupesan/project/java/scrumsimulator/mainpackage/ui/panels/DemoPaneTest.class
-/Users/chenchu/Desktop/ASU/SER515/Group Project/ser515-lambda/build/classes/java/test/com/groupesan/project/java/scrumsimulator/mainpackage/ui/panels/SimulationPaneTest.class
-/Users/chenchu/Desktop/ASU/SER515/Group Project/ser515-lambda/build/classes/java/test/com/groupesan/project/java/scrumsimulator/mainpackage/core/ScrumRoleTest.class
-/Users/chenchu/Desktop/ASU/SER515/Group Project/ser515-lambda/build/classes/java/test/com/groupesan/project/java/scrumsimulator/mainpackage/core/UserTest.class
-/Users/chenchu/Desktop/ASU/SER515/Group Project/ser515-lambda/build/classes/java/test/com/groupesan/project/java/scrumsimulator/mainpackage/state/SimulationStateTest.class
-/Users/chenchu/Desktop/ASU/SER515/Group Project/ser515-lambda/build/classes/java/test/com/groupesan/project/java/scrumsimulator/mainpackage/state/UserStoryStateTest.class
