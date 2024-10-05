@@ -6,6 +6,7 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.state.SimulationMan
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.SimulationStateManager;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.BaseComponent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.utils.WizardManager;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -30,7 +31,7 @@ public class DemoPane extends JFrame implements BaseComponent {
     public void init() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Demo");
-        setSize(1200, 300);
+        setSize(1400, 300);
 
         GridBagLayout myGridbagLayout = new GridBagLayout();
         JPanel myJpanel = new JPanel();
@@ -200,9 +201,28 @@ public class DemoPane extends JFrame implements BaseComponent {
 
         // Adding the button to the panel
         myJpanel.add(
-                SprintUIButton,
-                new CustomConstraints(
-                        8, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
+            SprintUIButton,
+            new CustomConstraints(
+                8, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL
+            )
+        );
+
+        JButton newSimulationWindowController = new JButton("New Simulation Controller");
+        newSimulationWindowController.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        WizardManager.get().showSimulationWizard();
+                    }
+                });
+
+        // Adding the button to the panel
+        myJpanel.add(
+            newSimulationWindowController,
+            new CustomConstraints(
+                12, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL
+            )
+        );
 
         add(myJpanel);
     }
