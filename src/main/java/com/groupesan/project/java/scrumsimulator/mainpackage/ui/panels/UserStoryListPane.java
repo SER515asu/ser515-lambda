@@ -64,7 +64,7 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
         myJpanel.add(
             new JScrollPane(subPanel),
             new CustomConstraints(
-                0, 0, GridBagConstraints.WEST, 3, 3, GridBagConstraints.HORIZONTAL
+                0, 0, GridBagConstraints.WEST, 1.0, 0.8, GridBagConstraints.HORIZONTAL
             )
         );
 
@@ -106,9 +106,5 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
                         0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
 
         add(myJpanel);
-    }
-
-    public void loadUserStories(){
-        
     }
 }
