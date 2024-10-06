@@ -55,22 +55,21 @@ public class UpdateUserStoryPanel extends JFrame {
         panel.add(updateButton);
 
         updateButton.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String selectedUserStory = (String) userStoryComboBox.getSelectedItem();
-                        String selectedStatus = (String) statusComboBox.getSelectedItem();
+            new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String selectedUserStory = (String) userStoryComboBox.getSelectedItem();
+                    String selectedStatus = (String) statusComboBox.getSelectedItem();
 
-                        if (selectedUserStory != null && selectedStatus != null) {
-                            UserStoryStateManager.updateUserStoryStatus(
-                                    selectedUserStory, selectedStatus);
-                            JOptionPane.showMessageDialog(null, "Status updated successfully!");
-                            dispose();
-                        } else {
-                            JOptionPane.showMessageDialog(
-                                    null, "Please select a User Story and Status");
-                        }
+                    if (selectedUserStory != null && selectedStatus != null) {
+                        // Use the correct method to update the user story status
+                        UserStoryStateManager.updateUserStoryStatus(selectedUserStory, selectedStatus);
+                        JOptionPane.showMessageDialog(null, "Status updated successfully!");
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Please select a User Story and Status");
                     }
-                });
+                }
+            });
     }
 }
