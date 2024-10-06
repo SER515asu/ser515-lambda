@@ -10,6 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import com.groupesan.project.java.scrumsimulator.mainpackage.core.User;
+import com.groupesan.project.java.scrumsimulator.mainpackage.core.ScrumRole;
 
 public class SimulationSwitchRolePane extends JFrame {
 
@@ -18,6 +20,10 @@ public class SimulationSwitchRolePane extends JFrame {
     private JRadioButton productOwnerRadioButton;
     private ButtonGroup roleButtonGroup;
     private JButton switchButton;
+
+    //no user object was created when the app is opened
+    //so it is created here to store switched role
+
 
     public SimulationSwitchRolePane() {
         setTitle("Simulation Status");
@@ -58,13 +64,22 @@ public class SimulationSwitchRolePane extends JFrame {
     }
 
     private void onSwitchButtonClicked() {
-        if (developerRadioButton.isSelected()) {
+        if (developerRadioButton.isSelected()) {    
+            ScrumRole currentRole = new ScrumRole("Developer");
+            //create the user instance or update the role
+            User.getCurrentUser("defaultName", currentRole);
             JOptionPane.showMessageDialog(
                     null, "Switched to Developer", "Role Switching", JOptionPane.PLAIN_MESSAGE);
         } else if (scrumMasterRadioButton.isSelected()) {
+            ScrumRole currentRole = new ScrumRole("Scrum Master");
+            //create the user instance or update the role
+            User.getCurrentUser("defaultName", currentRole);
             JOptionPane.showMessageDialog(
                     null, "Switched to Scrum Master", "Role Switching", JOptionPane.PLAIN_MESSAGE);
         } else if (productOwnerRadioButton.isSelected()) {
+            ScrumRole currentRole = new ScrumRole("Product Owner");
+            //create the user instance or update the role
+            User.getCurrentUser("defaultName", currentRole);
             JOptionPane.showMessageDialog(
                     null, "Switched to Product Owner", "Role Switching", JOptionPane.PLAIN_MESSAGE);
         } else {

@@ -26,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
+import com.groupesan.project.java.scrumsimulator.mainpackage.core.User;
 
 public class NewSprintForm extends JFrame implements BaseComponent {
     JTextField nameField = new JTextField();
@@ -99,7 +100,42 @@ public class NewSprintForm extends JFrame implements BaseComponent {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        dispose();
+                        //check if the current user instance exists
+                        //check if the current user has a role of Scrum Master
+                        if (User.getCurrentUser(null, null) == null) {
+                            System.out.println("User instance is null");
+                            //display the role switching pane
+                            SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
+                            feedbackPanelUI.setVisible(true);
+
+                        }
+                        else if (User.getCurrentUser(null, null).getRole() == null) {
+                            System.out.println("User role is null");
+                            //display the role switching pane
+                            SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
+                            feedbackPanelUI.setVisible(true);
+
+                        }
+                        else {
+                            String roleName = User.getCurrentUser(null, null).getRole().getName();
+                            System.out.println("current role: " + roleName);
+                            if (roleName.equals("Scrum Master")) {
+                                //create the sprint object here
+                                getSprintObject();
+                                System.out.println("Sprint created");
+                                //redirect to the sprint list pane
+                                SprintListPane sprintListUI = new SprintListPane();
+                                sprintListUI.setVisible(true);
+                                dispose();
+                            } else {
+                                //display the role switching pane
+                                SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
+                                feedbackPanelUI.setVisible(true);
+
+                                System.out.println("Wrong role");
+                            }
+                        }
+                       
                     }
                 });
 
