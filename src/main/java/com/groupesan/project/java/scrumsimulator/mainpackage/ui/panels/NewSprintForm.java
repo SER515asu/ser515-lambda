@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -97,36 +98,38 @@ public class NewSprintForm extends JFrame implements BaseComponent {
         JButton submitButton = new JButton("Submit");
 
         submitButton.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        //check if the current user instance exists
-                        //check if the current user has a role of Scrum Master
-                        if (User.getCurrentUser(null, null) == null) {
-                            System.out.println("User instance is null");
-                        }
-                        else if (User.getCurrentUser(null, null).getRole() == null) {
-                            System.out.println("User role is null");
-                        }
-                        else {
-                            String roleName = User.getCurrentUser(null, null).getRole().getName();
-                            System.out.println("current role: " + roleName);
-                            if (roleName.equals("Scrum Master")) {
-                                //create the sprint object here
-                                //placeholders
-                                System.out.println("Sprint created");
-                                dispose();
-                            } else {
-                                //display the role switching pane
-                                SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
-                                feedbackPanelUI.setVisible(true);
+            new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //check if the current user instance exists
+                    if (User.getCurrentUser(null, null) == null) {
+                        System.out.println("User instance is null");
+                        JOptionPane.showMessageDialog(null, "User instance is null", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else if (User.getCurrentUser(null, null).getRole() == null) {
+                        System.out.println("User role is null");
+                        JOptionPane.showMessageDialog(null, "User role is null", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        String roleName = User.getCurrentUser(null, null).getRole().getName();
+                        System.out.println("Current role: " + roleName);
+                        
+                        // Show dialog box displaying the user role
+                        JOptionPane.showMessageDialog(null, "User role is \"" + roleName + "\"", "User Role", JOptionPane.INFORMATION_MESSAGE);
 
-                                System.out.println("Wrong role");
-                            }
+                        if (roleName.equals("Scrum Master")) {
+                            // Create the sprint object here
+                            System.out.println("Sprint created");
+                            dispose();  // Close the form
+                        } else {
+                            // Display the role switching pane
+                            SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
+                            feedbackPanelUI.setVisible(true);
+                            
+                            System.out.println("Wrong role");
                         }
-                       
                     }
-                });
+                }
+            });
+
 
         listModel = new DefaultListModel<>();
         for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
