@@ -1,0 +1,3 @@
+build/ merge=drop
+.gradle/ merge=drop
+.DS_Store merge=drop
