@@ -1,10 +1,11 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets;
 
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStoryStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.EditUserStoryForm;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.UserStoryListPane;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
@@ -23,28 +24,43 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     // TODO: This is a non transient field and this class is supposed to be serializable. this needs
     // to be dealt with before this object can be serialized
     private UserStory userStory;
+    private UserStoryListPane _userStoryListPane;
 
-    ActionListener actionListener = e -> {};
+    // ActionListener actionListener = e -> {};
 
-    MouseAdapter openEditDialog =
-            new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    EditUserStoryForm form = new EditUserStoryForm(userStory);
-                    form.setVisible(true);
+    MouseAdapter openEditDialog = new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            EditUserStoryForm form = new EditUserStoryForm(userStory);
+            form.setVisible(true);
 
-                    form.addWindowListener(
-                            new java.awt.event.WindowAdapter() {
-                                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                                    init();
-                                }
-                            });
-                }
-            };
+            form.addWindowListener(
+                    new java.awt.event.WindowAdapter() {
+                        public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                            init();
+                        }
+                    });
+        }
+    };
+
+    MouseAdapter deleteUserStory = new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            UserStoryStore.getInstance().deleteUserStory(userStory);
+            System.out.println(_userStoryListPane.getName());
+            _userStoryListPane.reloadUserStoryPannel();
+            // UserStoryListPane.getInstance().reloadUserStoryPannel();
+        }
+    };
 
     public UserStoryWidget(UserStory userStory) {
         this.userStory = userStory;
+        this.init();
+    }
 
+    public UserStoryWidget(UserStory userStory, UserStoryListPane userStoryListPane) {
+        this.userStory = userStory;
+        this._userStoryListPane = userStoryListPane;
         this.init();
     }
 
@@ -62,7 +78,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
 
         desc = new JLabel(userStory.getDescription());
         desc.addMouseListener(openEditDialog);
-
+        
         deleteIcon = new JLabel(
             new ImageIcon(
                 new ImageIcon(
@@ -70,6 +86,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
                 ).getImage().getScaledInstance(14, 14, Image.SCALE_SMOOTH)
             )
         );
+        deleteIcon.addMouseListener(deleteUserStory);
 
         GridBagLayout myGridBagLayout = new GridBagLayout();
 
