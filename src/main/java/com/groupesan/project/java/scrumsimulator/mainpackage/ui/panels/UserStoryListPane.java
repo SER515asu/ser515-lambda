@@ -18,6 +18,8 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 public class UserStoryListPane extends JFrame implements BaseComponent {
+    private JPanel _subPanel;
+
     public UserStoryListPane() {
         this.init();
     }
@@ -43,14 +45,14 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
         //        widgets.add(new UserStoryWidget(aUserStory2));
 
         for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
-            widgets.add(new UserStoryWidget(userStory));
+            widgets.add(new UserStoryWidget(userStory, this));
         }
 
-        JPanel subPanel = new JPanel();
-        subPanel.setLayout(new GridBagLayout());
+        _subPanel = new JPanel();
+        _subPanel.setLayout(new GridBagLayout());
         int i = 0;
         for (UserStoryWidget widget : widgets) {
-            subPanel.add(
+            _subPanel.add(
                     widget,
                     new CustomConstraints(
                             0,
@@ -84,7 +86,7 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
                                         UserStoryStore.getInstance().addUserStory(userStory);
                                         widgets.add(new UserStoryWidget(userStory));
                                         int idx = widgets.size() - 1;
-                                        subPanel.add(
+                                        _subPanel.add(
                                                 widgets.get(idx),
                                                 new CustomConstraints(
                                                         0,
@@ -106,5 +108,37 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
                         0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
 
         add(myJpanel);
+    }
+
+    public void reloadUserStoryPannel(){
+        if(_subPanel == null){
+            System.out.println("Sub pannel is initiated!");
+            return;
+        }
+
+        _subPanel.removeAll();
+        widgets.clear();
+
+        for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
+            widgets.add(new UserStoryWidget(userStory, this));
+        }
+
+        int i = 0;
+        for (UserStoryWidget widget : widgets) {
+            _subPanel.add(
+                widget,
+                new CustomConstraints(
+                    0,
+                    i++,
+                    GridBagConstraints.WEST,
+                    1.0,
+                    0.1,
+                    GridBagConstraints.HORIZONTAL
+                )
+            );
+        }
+
+        _subPanel.revalidate();
+        _subPanel.repaint();
     }
 }

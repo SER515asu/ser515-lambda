@@ -1,6 +1,9 @@
 .gradle/*
 build/*
 .vscode/*
+*/.DS_Store
+.DS_Store
+bin/*
 build/
 .gradle/
 .DS_Store
