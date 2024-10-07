@@ -35,10 +35,6 @@ public class SprintListPane extends JFrame implements BaseComponent {
         myJpanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         myJpanel.setLayout(myGridbagLayout);
 
-        Sprint aSprint = SprintFactory.getSprintFactory().createNewSprint("foo", "bar", 2);
-        Sprint aSprint2 = SprintFactory.getSprintFactory().createNewSprint("foo2", "bar2", 4);
-        widgets.add(new SprintWidget(aSprint));
-        widgets.add(new SprintWidget(aSprint2));
 
         for (Sprint sprint : SprintStore.getInstance().getSprints()) {
             widgets.add(new SprintWidget(sprint));
@@ -71,25 +67,9 @@ public class SprintListPane extends JFrame implements BaseComponent {
                     public void actionPerformed(ActionEvent e) {
                         NewSprintForm form = new NewSprintForm();
                         form.setVisible(true);
-
-                        form.addWindowListener(
-                                new java.awt.event.WindowAdapter() {
-                                    public void windowClosed(
-                                            java.awt.event.WindowEvent windowEvent) {
-                                        Sprint newSprint = form.getSprintObject();
-                                        widgets.add(new SprintWidget(newSprint));
-                                        int idx = widgets.size() - 1;
-                                        subPanel.add(
-                                                widgets.get(idx),
-                                                new CustomConstraints(
-                                                        0,
-                                                        idx,
-                                                        GridBagConstraints.WEST,
-                                                        1.0,
-                                                        0.1,
-                                                        GridBagConstraints.HORIZONTAL));
-                                    }
-                                });
+                        //close the sprint list with outdated information
+                        dispose();
+                        
                     }
                 });
         myJpanel.add(
