@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -225,5 +226,17 @@ public class DemoPane extends JFrame implements BaseComponent {
         );
 
         add(myJpanel);
+
+        JButton populateSprintBacklogButton = new JButton("Populate Sprint Backlog");
+        populateSprintBacklogButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(null, "Sprint Backlog has been populated.");
+        }
+    });
+    myJpanel.add(
+    populateSprintBacklogButton,
+    new CustomConstraints(
+        2, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
     }
 }
