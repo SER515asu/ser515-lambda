@@ -21,6 +21,8 @@ public class UserStory extends ScrumObject {
 
     private Player owner;
 
+    private double businessValue;
+
     // private ArrayList<Task> tasks;  TODO: implement tasks
 
     /**
@@ -34,6 +36,7 @@ public class UserStory extends ScrumObject {
         this.description = "";
         this.pointValue = pointValue;
         this.state = new UserStoryUnselectedState(this);
+        this.businessValue = businessValue;
     }
 
     /**
@@ -44,11 +47,12 @@ public class UserStory extends ScrumObject {
      *     requirements.
      * @param pointValue the point value for the story as a way of estimating required effort.
      */
-    public UserStory(String name, String description, double pointValue) {
+    public UserStory(String name, String description, double pointValue, double businessValue) {
         this.name = name;
         this.description = description;
         this.pointValue = pointValue;
         this.state = new UserStoryUnselectedState(this);
+        this.businessValue = businessValue;
     }
 
     protected void register() {
@@ -121,6 +125,24 @@ public class UserStory extends ScrumObject {
      */
     public void setPointValue(double pointValue) {
         this.pointValue = pointValue;
+    }
+
+    /**
+     * Get the business value of this UserStory
+     *
+     * @return the business value of this UserStory as a double
+     */
+    public double getBusinessValue() {
+        return businessValue;
+    }
+
+    /**
+     * Set the business value of the User Story to the specified value
+     *
+     * @param pointValue the business value as a double. Usually an element of the fibonacci sequence.
+     */
+    public void setBusinessValue(double businessValue) {
+        this.businessValue = businessValue;
     }
 
     /**
