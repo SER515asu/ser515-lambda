@@ -64,7 +64,7 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
         }
 
         myJpanel.add(
-            new JScrollPane(subPanel),
+            new JScrollPane(_subPanel),
             new CustomConstraints(
                 0, 0, GridBagConstraints.WEST, 1.0, 0.8, GridBagConstraints.HORIZONTAL
             )
@@ -96,8 +96,8 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
                                                         0.1,
                                                         GridBagConstraints.HORIZONTAL));
 
-                                        subPanel.revalidate();
-                                        subPanel.repaint();
+                                        _subPanel.revalidate();
+                                        _subPanel.repaint();
                                     }
                                 });
                     }
