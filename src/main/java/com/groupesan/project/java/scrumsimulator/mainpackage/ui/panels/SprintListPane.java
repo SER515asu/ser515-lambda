@@ -17,6 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class SprintListPane extends JFrame implements BaseComponent {
     public SprintListPane() {
@@ -28,7 +30,7 @@ public class SprintListPane extends JFrame implements BaseComponent {
     public void init() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("Sprints list");
-        setSize(400, 300);
+        setSize(800, 800);
 
         GridBagLayout myGridbagLayout = new GridBagLayout();
         JPanel myJpanel = new JPanel();
@@ -76,6 +78,47 @@ public class SprintListPane extends JFrame implements BaseComponent {
                 newSprintButton,
                 new CustomConstraints(
                         0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
+
+        JLabel maxNumSprints = new JLabel("Enter the maximum number of sprints:");
+        myJpanel.add(
+                maxNumSprints,
+                new CustomConstraints(
+                    0, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+
+        JTextField maxNumSprintsField = new JTextField();
+        myJpanel.add(
+            maxNumSprintsField,
+            new CustomConstraints(
+                        1, 2, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+
+        
+        JLabel minNumSprints = new JLabel("Enter the minimum number of sprints: ");
+        myJpanel.add(
+                minNumSprints,
+                new CustomConstraints(
+                    0, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+
+        JTextField minNumSprintsField = new JTextField();
+        myJpanel.add(
+            minNumSprintsField,
+            new CustomConstraints(
+                        1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+        
+        JButton rangeNumSprintsButton = new JButton("Confirm the Range");
+        rangeNumSprintsButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                    }
+                }
+        );
+
+        myJpanel.add(
+                rangeNumSprintsButton,
+                new CustomConstraints(2, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE));
+
+
 
         add(myJpanel);
     }
