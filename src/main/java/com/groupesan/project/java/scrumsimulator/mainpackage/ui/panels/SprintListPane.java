@@ -19,15 +19,33 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.InvalidInputWindow;
+import java.security.SecureRandom;
+
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SprintStore;
 
 public class SprintListPane extends JFrame implements BaseComponent {
     public SprintListPane() {
         this.init();
+        random = new SecureRandom();
+       
     }
+
+    private static int sprintCountSet = 0;
+    private SecureRandom random;
 
     private List<SprintWidget> widgets = new ArrayList<>();
 
     public void init() {
+        SprintStore sprintStore = SprintStore.getInstance();
+        int sprintCount = sprintStore.getSprints().size();
+        if (sprintCountSet != 0) {
+            if (sprintCount < sprintCountSet) {
+                int numAdd = sprintCountSet - sprintCount;
+                InvalidInputWindow invalidInputWindow = new InvalidInputWindow("You need to add " + numAdd + " more sprints.", "Warning");
+                invalidInputWindow.setVisible(true);
+            }
+        }
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("Sprints list");
         setSize(800, 800);
@@ -67,8 +85,18 @@ public class SprintListPane extends JFrame implements BaseComponent {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        NewSprintForm form = new NewSprintForm();
-                        form.setVisible(true);
+                        SprintStore sprintStore = SprintStore.getInstance();
+                        int sprintCount = sprintStore.getSprints().size();
+                        if (sprintCountSet != 0 && sprintCount >= sprintCountSet) {
+                           
+                                InvalidInputWindow invalidInputWindow = new InvalidInputWindow("You have enough sprints already.", "Warning");
+                                invalidInputWindow.setVisible(true);
+                            
+                        }
+                        else {
+                            NewSprintForm form = new NewSprintForm();
+                            form.setVisible(true);
+                        }
                         //close the sprint list with outdated information
                         dispose();
                         
@@ -109,7 +137,37 @@ public class SprintListPane extends JFrame implements BaseComponent {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        String maxDaysInput = maxNumSprintsField.getText();
+                        String minDaysInput = minNumSprintsField.getText();
+                        int maxDays = 0;
+                        int minDays = 0;
+                        try {
+                            maxDays = Integer.parseInt(maxDaysInput);
+                            minDays = Integer.parseInt(minDaysInput);
+                        }
 
+                        catch (NumberFormatException ex) {
+                            System.out.println("Please enter a valid number");
+                            InvalidInputWindow invalidInputWindow = new InvalidInputWindow("Must enter integers.", "Invalid Input");
+                            invalidInputWindow.setVisible(true);
+                            
+                        }
+
+                        if (minDays >= maxDays || minDays <= 0) {
+                            InvalidInputWindow invalidInputWindow = new InvalidInputWindow("Enter a valid range.", "Invalid Input");
+                            invalidInputWindow.setVisible(true);
+                        }
+                        else {
+                            //generate a random number
+
+                            int randomNum = random.nextInt((maxDays - minDays) + 1) + minDays;
+                            sprintCountSet = randomNum;
+                            InvalidInputWindow invalidInputWindow = new InvalidInputWindow("Sprint count is set to " + randomNum + ".", "Success");
+                            invalidInputWindow.setVisible(true);
+
+
+
+                        }
                     }
                 }
         );
