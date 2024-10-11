@@ -17,10 +17,10 @@ public class PossibleBlockerWidget extends JPanel implements BaseComponent {
     private JLabel desc;
     private JLabel deleteIcon;
 
-    private PossibleBlocker _possibleBlocker;
+    private transient PossibleBlocker _possibleBlocker;
 
 
-    MouseAdapter openEditDialog = new MouseAdapter() {
+    private transient MouseAdapter openEditDialog = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
             // EditUserStoryForm form = new EditUserStoryForm(userStory);
@@ -36,7 +36,7 @@ public class PossibleBlockerWidget extends JPanel implements BaseComponent {
         }
     };
 
-    MouseAdapter deleteUserStory = new MouseAdapter() {
+    private transient MouseAdapter deleteUserStory = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
             // UserStoryStore.getInstance().deleteUserStory(userStory);
