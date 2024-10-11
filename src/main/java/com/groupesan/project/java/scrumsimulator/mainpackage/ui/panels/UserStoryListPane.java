@@ -36,14 +36,6 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
         myJpanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         myJpanel.setLayout(myGridbagLayout);
 
-        // demo/testing widgets
-        //        UserStory aUserStory = UserStoryFactory.getInstance().createNewUserStory("foo",
-        // "bar", 2);
-        //        UserStory aUserStory2 =
-        //                UserStoryFactory.getInstance().createNewUserStory("foo2", "bar2", 4);
-        //        widgets.add(new UserStoryWidget(aUserStory));
-        //        widgets.add(new UserStoryWidget(aUserStory2));
-
         for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
             widgets.add(new UserStoryWidget(userStory, this));
         }
@@ -72,40 +64,47 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
 
         JButton newSprintButton = new JButton("New User Story");
         newSprintButton.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        NewUserStoryForm form = new NewUserStoryForm();
-                        form.setVisible(true);
+            new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    NewUserStoryForm form = new NewUserStoryForm();
+                    form.setVisible(true);
 
-                        form.addWindowListener(
-                                new java.awt.event.WindowAdapter() {
-                                    public void windowClosed(
-                                            java.awt.event.WindowEvent windowEvent) {
-                                        UserStory userStory = form.getUserStoryObject();
-                                        UserStoryStore.getInstance().addUserStory(userStory);
-                                        widgets.add(new UserStoryWidget(userStory));
-                                        int idx = widgets.size() - 1;
-                                        _subPanel.add(
-                                                widgets.get(idx),
-                                                new CustomConstraints(
-                                                        0,
-                                                        idx,
-                                                        GridBagConstraints.WEST,
-                                                        1.0,
-                                                        0.1,
-                                                        GridBagConstraints.HORIZONTAL));
+                    form.addWindowListener(
+                        new java.awt.event.WindowAdapter() {
+                            public void windowClosed(
+                                java.awt.event.WindowEvent windowEvent) {
+                                UserStory userStory = form.getUserStoryObject();
+                                UserStoryStore.getInstance().addUserStory(userStory);
+                                widgets.add(new UserStoryWidget(userStory));
+                                int idx = widgets.size() - 1;
+                                _subPanel.add(
+                                    widgets.get(idx),
+                                    new CustomConstraints(
+                                        0,
+                                        idx,
+                                        GridBagConstraints.WEST,
+                                        1.0,
+                                        0.1,
+                                        GridBagConstraints.HORIZONTAL
+                                    )
+                                );
 
-                                        _subPanel.revalidate();
-                                        _subPanel.repaint();
-                                    }
-                                });
-                    }
-                });
+                                _subPanel.revalidate();
+                                _subPanel.repaint();
+                            }
+                        }
+                    );
+                }
+            }
+        );
+        
         myJpanel.add(
-                newSprintButton,
-                new CustomConstraints(
-                        0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
+            newSprintButton,
+            new CustomConstraints(
+                0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL
+            )
+        );
 
         add(myJpanel);
     }

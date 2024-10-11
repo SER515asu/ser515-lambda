@@ -35,11 +35,12 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
             form.setVisible(true);
 
             form.addWindowListener(
-                    new java.awt.event.WindowAdapter() {
-                        public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                            init();
-                        }
-                    });
+                new java.awt.event.WindowAdapter() {
+                    public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                        init();
+                    }
+                }
+            );
         }
     };
 
