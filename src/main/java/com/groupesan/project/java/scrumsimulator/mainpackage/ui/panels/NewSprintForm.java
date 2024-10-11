@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -30,9 +31,6 @@ import java.awt.*;
 import java.util.Calendar;
 import java.util.Date;
 
-
-
-
 public class NewSprintForm extends JFrame implements BaseComponent {
     JTextField nameField = new JTextField();
     JTextArea descArea = new JTextArea();
@@ -44,6 +42,9 @@ public class NewSprintForm extends JFrame implements BaseComponent {
 
     DefaultListModel<String> listModel;
     JList<String> usList;
+
+    // Dropdown for selecting the number of sprints
+    JComboBox<String> sprintCountDropdown;
 
     public NewSprintForm() {
         this.init();
@@ -90,53 +91,66 @@ public class NewSprintForm extends JFrame implements BaseComponent {
                 sprintDays,
                 new CustomConstraints(
                         1, 2, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.WEST));
-    
-    // Start Date
-    JLabel startDateLabel = new JLabel("Start Date:");
-    myJpanel.add(
-            startDateLabel,
-            new CustomConstraints(
-                    0, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 
-    JPanel startDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    startDaySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
-    startMonthSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 12, 1));
-    startYearSpinner = new JSpinner(new SpinnerNumberModel(2023, 2000, 2100, 1));
-    startDatePanel.add(new JLabel("Day:"));
-    startDatePanel.add(startDaySpinner);
-    startDatePanel.add(new JLabel("Month:"));
-    startDatePanel.add(startMonthSpinner);
-    startDatePanel.add(new JLabel("Year:"));
-    startDatePanel.add(startYearSpinner);
+        // Start Date
+        JLabel startDateLabel = new JLabel("Start Date:");
+        myJpanel.add(
+                startDateLabel,
+                new CustomConstraints(
+                        0, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 
-    myJpanel.add(
-            startDatePanel,
-            new CustomConstraints(
-                    1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+        JPanel startDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        startDaySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
+        startMonthSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 12, 1));
+        startYearSpinner = new JSpinner(new SpinnerNumberModel(2023, 2000, 2100, 1));
+        startDatePanel.add(new JLabel("Day:"));
+        startDatePanel.add(startDaySpinner);
+        startDatePanel.add(new JLabel("Month:"));
+        startDatePanel.add(startMonthSpinner);
+        startDatePanel.add(new JLabel("Year:"));
+        startDatePanel.add(startYearSpinner);
 
-    // End Date
-    JLabel endDateLabel = new JLabel("End Date:");
-    myJpanel.add(
-            endDateLabel,
-            new CustomConstraints(
-                    0, 4, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(
+                startDatePanel,
+                new CustomConstraints(
+                        1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
 
-    JPanel endDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    endDaySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
-    endMonthSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 12, 1));
-    endYearSpinner = new JSpinner(new SpinnerNumberModel(2023, 2000, 2100, 1));
-    endDatePanel.add(new JLabel("Day:"));
-    endDatePanel.add(endDaySpinner);
-    endDatePanel.add(new JLabel("Month:"));
-    endDatePanel.add(endMonthSpinner);
-    endDatePanel.add(new JLabel("Year:"));
-    endDatePanel.add(endYearSpinner);
+        // End Date
+        JLabel endDateLabel = new JLabel("End Date:");
+        myJpanel.add(
+                endDateLabel,
+                new CustomConstraints(
+                        0, 4, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 
-    myJpanel.add(
-            endDatePanel,
-            new CustomConstraints(
-                    1, 4, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+        JPanel endDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        endDaySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
+        endMonthSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 12, 1));
+        endYearSpinner = new JSpinner(new SpinnerNumberModel(2023, 2000, 2100, 1));
+        endDatePanel.add(new JLabel("Day:"));
+        endDatePanel.add(endDaySpinner);
+        endDatePanel.add(new JLabel("Month:"));
+        endDatePanel.add(endMonthSpinner);
+        endDatePanel.add(new JLabel("Year:"));
+        endDatePanel.add(endYearSpinner);
+
+        myJpanel.add(
+                endDatePanel,
+                new CustomConstraints(
+                        1, 4, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+
+        // Add dropdown for selecting number of sprints
+        JLabel sprintCountLabel = new JLabel("Number of Sprints:");
+        sprintCountDropdown = new JComboBox<>(new String[] {"1", "2", "3"});
         
+        myJpanel.add(
+                sprintCountLabel,
+                new CustomConstraints(
+                        0, 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(
+                sprintCountDropdown,
+                new CustomConstraints(
+                        1, 5, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+
         JButton cancelButton = new JButton("Cancel");
 
         cancelButton.addActionListener(
@@ -153,42 +167,29 @@ public class NewSprintForm extends JFrame implements BaseComponent {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        //check if the current user instance exists
-                        //check if the current user has a role of Scrum Master
                         if (User.getCurrentUser(null, null) == null) {
                             System.out.println("User instance is null");
-                            //display the role switching pane
                             SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
                             feedbackPanelUI.setVisible(true);
-
-                        }
-                        else if (User.getCurrentUser(null, null).getRole() == null) {
+                        } else if (User.getCurrentUser(null, null).getRole() == null) {
                             System.out.println("User role is null");
-                            //display the role switching pane
                             SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
                             feedbackPanelUI.setVisible(true);
-
-                        }
-                        else {
+                        } else {
                             String roleName = User.getCurrentUser(null, null).getRole().getName();
                             System.out.println("current role: " + roleName);
                             if (roleName.equals("Scrum Master")) {
-                                //create the sprint object here
                                 getSprintObject();
                                 System.out.println("Sprint created");
-                                //redirect to the sprint list pane
                                 SprintListPane sprintListUI = new SprintListPane();
                                 sprintListUI.setVisible(true);
                                 dispose();
                             } else {
-                                //display the role switching pane
                                 SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
                                 feedbackPanelUI.setVisible(true);
-
                                 System.out.println("Wrong role");
                             }
                         }
-                       
                     }
                 });
 
@@ -201,16 +202,6 @@ public class NewSprintForm extends JFrame implements BaseComponent {
         usList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane scrollPane = new JScrollPane(usList);
         scrollPane.setPreferredSize(new Dimension(300, 100));
-
-        // JLabel userStoriesLabel = new JLabel("User Stories:");
-        // myJpanel.add(
-        //         userStoriesLabel,
-        //         new CustomConstraints(
-        //                 0, 3, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL));
-        // myJpanel.add(
-        //         usList,
-        //         new CustomConstraints(
-        //                 1, 3, GridBagConstraints.WEST, 1.0, 0.0, GridBagConstraints.NONE));
 
         myJpanel.add(
                 cancelButton,
@@ -226,9 +217,9 @@ public class NewSprintForm extends JFrame implements BaseComponent {
         String name = nameField.getText();
         String description = descArea.getText();
         Integer length = (Integer) sprintDays.getValue();
+        String sprintCount = (String) sprintCountDropdown.getSelectedItem(); // Get selected number of sprints
 
         SprintFactory sprintFactory = SprintFactory.getSprintFactory();
-
         Sprint mySprint = sprintFactory.createNewSprint(name, description, length);
 
         int[] selectedIdx = usList.getSelectedIndices();
@@ -243,9 +234,9 @@ public class NewSprintForm extends JFrame implements BaseComponent {
             }
         }
 
+        // Process sprintCount if needed in your logic
+        
         SprintStore.getInstance().addSprint(mySprint);
-
-        System.out.println(mySprint);
 
         return mySprint;
     }
