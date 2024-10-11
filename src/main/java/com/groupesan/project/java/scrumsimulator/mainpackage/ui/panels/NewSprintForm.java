@@ -96,7 +96,7 @@ public class NewSprintForm extends JFrame implements BaseComponent {
     myJpanel.add(
             startDateLabel,
             new CustomConstraints(
-                    0, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+                    0, 4, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 
     JPanel startDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     startDaySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
@@ -112,14 +112,14 @@ public class NewSprintForm extends JFrame implements BaseComponent {
     myJpanel.add(
             startDatePanel,
             new CustomConstraints(
-                    1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+                    1, 4, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
 
     // End Date
     JLabel endDateLabel = new JLabel("End Date:");
     myJpanel.add(
             endDateLabel,
             new CustomConstraints(
-                    0, 4, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+                    0, 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 
     JPanel endDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     endDaySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
@@ -135,7 +135,7 @@ public class NewSprintForm extends JFrame implements BaseComponent {
     myJpanel.add(
             endDatePanel,
             new CustomConstraints(
-                    1, 4, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+                    1, 5, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
         
         JButton cancelButton = new JButton("Cancel");
 
@@ -201,23 +201,24 @@ public class NewSprintForm extends JFrame implements BaseComponent {
         usList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane scrollPane = new JScrollPane(usList);
         scrollPane.setPreferredSize(new Dimension(300, 100));
-
-        // JLabel userStoriesLabel = new JLabel("User Stories:");
-        // myJpanel.add(
-        //         userStoriesLabel,
-        //         new CustomConstraints(
-        //                 0, 3, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL));
-        // myJpanel.add(
-        //         usList,
-        //         new CustomConstraints(
-        //                 1, 3, GridBagConstraints.WEST, 1.0, 0.0, GridBagConstraints.NONE));
+        //user stories slection field
+        
+        JLabel userStoriesLabel = new JLabel("User Stories:");
+        myJpanel.add(
+                userStoriesLabel,
+                new CustomConstraints(
+                        0, 3, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL));
+         myJpanel.add(
+              usList,
+              new CustomConstraints(
+                     1, 3, GridBagConstraints.WEST, 1.0, 0.0, GridBagConstraints.NONE));
 
         myJpanel.add(
                 cancelButton,
-                new CustomConstraints(0, 6, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new CustomConstraints(2, 6, GridBagConstraints.EAST, GridBagConstraints.NONE));
         myJpanel.add(
                 submitButton,
-                new CustomConstraints(1, 6, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new CustomConstraints(3, 6, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         add(myJpanel);
     }
