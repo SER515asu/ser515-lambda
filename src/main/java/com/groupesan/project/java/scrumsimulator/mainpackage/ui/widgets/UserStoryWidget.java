@@ -34,13 +34,14 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
             EditUserStoryForm form = new EditUserStoryForm(userStory);
             form.setVisible(true);
 
-            form.addWindowListener(
-                new java.awt.event.WindowAdapter() {
-                    public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                        init();
-                    }
-                }
-            );
+            // This was not allowing user to edit user story multiple times
+            // form.addWindowListener(
+            //     new java.awt.event.WindowAdapter() {
+            //         public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+            //             init();
+            //         }
+            //     }
+            // );
         }
     };
 
