@@ -19,14 +19,11 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     JLabel points;
     JLabel name;
     JLabel desc;
+    JLabel businessValue; 
     JLabel deleteIcon;
 
-    // TODO: This is a non transient field and this class is supposed to be serializable. this needs
-    // to be dealt with before this object can be serialized
     private UserStory userStory;
     private UserStoryListPane _userStoryListPane;
-
-    // ActionListener actionListener = e -> {};
 
     MouseAdapter openEditDialog = new MouseAdapter() {
         @Override
@@ -34,13 +31,14 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
             EditUserStoryForm form = new EditUserStoryForm(userStory);
             form.setVisible(true);
 
-            form.addWindowListener(
-                new java.awt.event.WindowAdapter() {
-                    public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                        init();
-                    }
-                }
-            );
+            // This was not allowing the user to edit user story multiple times
+            // form.addWindowListener(
+            //     new java.awt.event.WindowAdapter() {
+            //         public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+            //             init();
+            //         }
+            //     }
+            // );
         }
     };
 
@@ -48,9 +46,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         @Override
         public void mouseClicked(MouseEvent e) {
             UserStoryStore.getInstance().deleteUserStory(userStory);
-            System.out.println(_userStoryListPane.getName());
             _userStoryListPane.reloadUserStoryPannel();
-            // UserStoryListPane.getInstance().reloadUserStoryPannel();
         }
     };
 
@@ -79,6 +75,9 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
 
         desc = new JLabel(userStory.getDescription());
         desc.addMouseListener(openEditDialog);
+
+        businessValue = new JLabel(Double.toString(userStory.getBusinessValue()));
+        businessValue.addMouseListener(openEditDialog);
         
         deleteIcon = new JLabel(
             new ImageIcon(
@@ -90,7 +89,6 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         deleteIcon.addMouseListener(deleteUserStory);
 
         GridBagLayout myGridBagLayout = new GridBagLayout();
-
         setLayout(myGridBagLayout);
 
         add(
@@ -121,7 +119,15 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
             desc,
             new CustomConstraints(
                 3, 0, GridBagConstraints.WEST, 
-                0.7, 0.0, GridBagConstraints.HORIZONTAL
+                0.5, 0.0, GridBagConstraints.HORIZONTAL
+            )
+        );
+
+        add(
+            businessValue,
+            new CustomConstraints(
+                4, 0, GridBagConstraints.WEST, 
+                0.2, 0.0, GridBagConstraints.HORIZONTAL
             )
         );
 
@@ -129,7 +135,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
             deleteIcon,
             new CustomConstraints(
                 5, 0, GridBagConstraints.WEST, 
-                0.7, 0.0, GridBagConstraints.HORIZONTAL
+                0.1, 0.0, GridBagConstraints.HORIZONTAL
             )
         );
     }

@@ -251,9 +251,9 @@ public class DemoPane extends JFrame implements BaseComponent {
 
         myJpanel.add(
             populateSprintBacklogButton,
-            new CustomConstraints(
+            (new CustomConstraints(
                 1, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL
-            )
+            )).setGridWidth(2)
         );
 
         // Possible Blockers View
@@ -271,9 +271,9 @@ public class DemoPane extends JFrame implements BaseComponent {
         
         myJpanel.add(
             blockersViewButton,
-            new CustomConstraints(
-                2, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL
-            )
+            (new CustomConstraints(
+                3, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL
+            )).setGridWidth(2)
         );
 
         add(myJpanel);
