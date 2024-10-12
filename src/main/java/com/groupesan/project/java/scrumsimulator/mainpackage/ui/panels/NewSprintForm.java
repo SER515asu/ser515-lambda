@@ -90,53 +90,53 @@ public class NewSprintForm extends JFrame implements BaseComponent {
                 sprintDays,
                 new CustomConstraints(
                         1, 2, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.WEST));
-    
-    // Start Date
-    JLabel startDateLabel = new JLabel("Start Date:");
-    myJpanel.add(
-            startDateLabel,
-            new CustomConstraints(
-                    0, 4, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 
-    JPanel startDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    startDaySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
-    startMonthSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 12, 1));
-    startYearSpinner = new JSpinner(new SpinnerNumberModel(2023, 2000, 2100, 1));
-    startDatePanel.add(new JLabel("Day:"));
-    startDatePanel.add(startDaySpinner);
-    startDatePanel.add(new JLabel("Month:"));
-    startDatePanel.add(startMonthSpinner);
-    startDatePanel.add(new JLabel("Year:"));
-    startDatePanel.add(startYearSpinner);
+        // Start Date
+        JLabel startDateLabel = new JLabel("Start Date:");
+        myJpanel.add(
+                startDateLabel,
+                new CustomConstraints(
+                        0, 4, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 
-    myJpanel.add(
-            startDatePanel,
-            new CustomConstraints(
-                    1, 4, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+        JPanel startDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        startDaySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
+        startMonthSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 12, 1));
+        startYearSpinner = new JSpinner(new SpinnerNumberModel(2023, 2000, 2100, 1));
+        startDatePanel.add(new JLabel("Day:"));
+        startDatePanel.add(startDaySpinner);
+        startDatePanel.add(new JLabel("Month:"));
+        startDatePanel.add(startMonthSpinner);
+        startDatePanel.add(new JLabel("Year:"));
+        startDatePanel.add(startYearSpinner);
 
-    // End Date
-    JLabel endDateLabel = new JLabel("End Date:");
-    myJpanel.add(
-            endDateLabel,
-            new CustomConstraints(
-                    0, 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(
+                startDatePanel,
+                new CustomConstraints(
+                        1, 4, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
 
-    JPanel endDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    endDaySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
-    endMonthSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 12, 1));
-    endYearSpinner = new JSpinner(new SpinnerNumberModel(2023, 2000, 2100, 1));
-    endDatePanel.add(new JLabel("Day:"));
-    endDatePanel.add(endDaySpinner);
-    endDatePanel.add(new JLabel("Month:"));
-    endDatePanel.add(endMonthSpinner);
-    endDatePanel.add(new JLabel("Year:"));
-    endDatePanel.add(endYearSpinner);
+        // End Date
+        JLabel endDateLabel = new JLabel("End Date:");
+        myJpanel.add(
+                endDateLabel,
+                new CustomConstraints(
+                        0, 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 
-    myJpanel.add(
-            endDatePanel,
-            new CustomConstraints(
-                    1, 5, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
-        
+        JPanel endDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        endDaySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
+        endMonthSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 12, 1));
+        endYearSpinner = new JSpinner(new SpinnerNumberModel(2023, 2000, 2100, 1));
+        endDatePanel.add(new JLabel("Day:"));
+        endDatePanel.add(endDaySpinner);
+        endDatePanel.add(new JLabel("Month:"));
+        endDatePanel.add(endMonthSpinner);
+        endDatePanel.add(new JLabel("Year:"));
+        endDatePanel.add(endYearSpinner);
+
+        myJpanel.add(
+                endDatePanel,
+                new CustomConstraints(
+                        1, 5, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+
         JButton cancelButton = new JButton("Cancel");
 
         cancelButton.addActionListener(
@@ -188,7 +188,7 @@ public class NewSprintForm extends JFrame implements BaseComponent {
                                 System.out.println("Wrong role");
                             }
                         }
-                       
+
                     }
                 });
 
@@ -202,16 +202,16 @@ public class NewSprintForm extends JFrame implements BaseComponent {
         JScrollPane scrollPane = new JScrollPane(usList);
         scrollPane.setPreferredSize(new Dimension(300, 100));
         //user stories slection field
-        
+
         JLabel userStoriesLabel = new JLabel("User Stories:");
         myJpanel.add(
                 userStoriesLabel,
                 new CustomConstraints(
                         0, 3, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL));
-         myJpanel.add(
-              usList,
-              new CustomConstraints(
-                     1, 3, GridBagConstraints.WEST, 1.0, 0.0, GridBagConstraints.NONE));
+        myJpanel.add(
+                usList,
+                new CustomConstraints(
+                        1, 3, GridBagConstraints.WEST, 1.0, 0.0, GridBagConstraints.NONE));
 
         myJpanel.add(
                 cancelButton,
@@ -245,6 +245,22 @@ public class NewSprintForm extends JFrame implements BaseComponent {
         }
 
         SprintStore.getInstance().addSprint(mySprint);
+
+        int startDay = (Integer) startDaySpinner.getValue();
+        int startMonth = (Integer) startMonthSpinner.getValue();
+        int startYear = (Integer) startYearSpinner.getValue();
+        int endDay = (Integer) endDaySpinner.getValue();
+        int endMonth = (Integer) endMonthSpinner.getValue();
+        int endYear = (Integer) endYearSpinner.getValue();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(startYear, startMonth - 1, startDay);
+        Date startDate = calendar.getTime();
+        mySprint.setStartDate(startDate);
+
+        calendar.set(endYear, endMonth - 1, endDay);
+        Date endDate = calendar.getTime();
+        mySprint.setEndDate(endDate);
 
         System.out.println(mySprint);
 
