@@ -50,8 +50,13 @@ public class PossibleBlockerWidget extends JPanel implements BaseComponent {
         this.init();
     }
 
-    public void print(){
+    public String print(){
         System.out.println(this._possibleBlocker.getId() + " - " + this._possibleBlocker.getName() + " - " + this._possibleBlocker.getDescription());
+        return  this._possibleBlocker.getId() + " - " + this._possibleBlocker.getName() + " - " + this._possibleBlocker.getDescription();
+    }
+
+    public String getBlockerId() {
+        return this._possibleBlocker.getId();
     }
 
     public void init() {

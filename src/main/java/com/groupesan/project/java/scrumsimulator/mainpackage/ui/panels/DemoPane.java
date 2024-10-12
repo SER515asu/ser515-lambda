@@ -268,6 +268,7 @@ public class DemoPane extends JFrame implements BaseComponent {
             }
         );
 
+        
         myJpanel.add(
             blockersViewButton,
             (new CustomConstraints(

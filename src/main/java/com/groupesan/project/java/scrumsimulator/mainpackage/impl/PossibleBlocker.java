@@ -24,4 +24,8 @@ public class PossibleBlocker {
     public String getName() {
         return name;
     }
+
+    public String print(){
+        return this.id + " - " + this.name + " - " + this.description;
+    }
 }

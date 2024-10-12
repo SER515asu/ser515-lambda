@@ -9,12 +9,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.Solutions;
 
 public class PossibleBlockersListPane extends JFrame implements BaseComponent {
     private JPanel _subPanel;
@@ -49,14 +51,20 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
 
         _subPanel = new JPanel(new GridBagLayout());
 
-        int i = 0;
-        for (PossibleBlocker pb: PossibleBlockersStore.getInstance().getListOfPossibleBlockers()) {
-            PossibleBlockerWidget pbw = new PossibleBlockerWidget(pb);
+        List<PossibleBlocker> blockers = PossibleBlockersStore.getInstance().getListOfPossibleBlockers();
+        for (int i = 0; i < PossibleBlockersStore.getInstance().size(); i++) {
 
+            PossibleBlocker pbw = blockers.get(i);
+            JButton solutionListButton = new JButton(pbw.print());
+            solutionListButton.addActionListener(e -> {
+                Solutions solutions = new Solutions(pbw.getId());
+                solutions.setVisible(true);
+
+            });
             _subPanel.add(
-                pbw,
+                solutionListButton,
                 new CustomConstraints(
-                    0, i++, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL
+                    0, i, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL
                 )
             );
         }
@@ -69,6 +77,7 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
         );
 
         JButton newBlockerButton = new JButton("New Blocker Story");
+
         myJPanel.add(
             newBlockerButton,
             new CustomConstraints(
