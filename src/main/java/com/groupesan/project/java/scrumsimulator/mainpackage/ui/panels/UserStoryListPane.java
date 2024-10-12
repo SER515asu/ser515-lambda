@@ -76,22 +76,22 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
                                 java.awt.event.WindowEvent windowEvent) {
                                 UserStory userStory = form.getUserStoryObject();
                                 UserStoryStore.getInstance().addUserStory(userStory);
-                                widgets.add(new UserStoryWidget(userStory));
-                                int idx = widgets.size() - 1;
-                                _subPanel.add(
-                                    widgets.get(idx),
-                                    new CustomConstraints(
-                                        0,
-                                        idx,
-                                        GridBagConstraints.WEST,
-                                        1.0,
-                                        0.1,
-                                        GridBagConstraints.HORIZONTAL
-                                    )
-                                );
+                                
+                                // widgets.add(new UserStoryWidget(userStory));
+                                // int idx = widgets.size() - 1;
+                                // _subPanel.add(
+                                //     widgets.get(idx),
+                                //     new CustomConstraints(
+                                //         0,
+                                //         idx,
+                                //         GridBagConstraints.WEST,
+                                //         1.0,
+                                //         0.1,
+                                //         GridBagConstraints.HORIZONTAL
+                                //     )
+                                // );
 
-                                _subPanel.revalidate();
-                                _subPanel.repaint();
+                                reloadUserStoryPannel();
                             }
                         }
                     );

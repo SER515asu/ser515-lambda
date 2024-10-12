@@ -244,7 +244,7 @@ public class DemoPane extends JFrame implements BaseComponent {
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JOptionPane.showMessageDialog(null, "Sprint Backlog has been populated.");
+                    JOptionPane.showMessageDialog(null, "This feature is under development.");
                 }
             }
         );
