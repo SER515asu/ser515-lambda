@@ -9,6 +9,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -50,19 +51,20 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
 
         _subPanel = new JPanel(new GridBagLayout());
 
+        List<PossibleBlocker> blockers = PossibleBlockersStore.getInstance().getListOfPossibleBlockers();
+        for (int i = 0; i < PossibleBlockersStore.getInstance().size(); i++) {
 
-        for (int i = 0; i < dummyPBList.size(); i++) {
-            PossibleBlockerWidget pbw = dummyPBList.get(i);
+            PossibleBlocker pbw = blockers.get(i);
             JButton solutionListButton = new JButton(pbw.print());
             solutionListButton.addActionListener(e -> {
-                Solutions solutions = new Solutions(pbw.getBlockerId());
+                Solutions solutions = new Solutions(pbw.getId());
                 solutions.setVisible(true);
 
             });
             _subPanel.add(
                 solutionListButton,
                 new CustomConstraints(
-                    0, i++, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL
+                    0, i, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL
                 )
             );
         }

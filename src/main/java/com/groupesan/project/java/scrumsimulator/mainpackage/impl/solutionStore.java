@@ -3,12 +3,12 @@ package com.groupesan.project.java.scrumsimulator.mainpackage.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-public class solutionStore {
-    private static solutionStore solutionStore;
+public class SolutionStore {
+    private static SolutionStore solutionStore;
 
-    public static solutionStore getInstance() {
+    public static SolutionStore getInstance() {
         if (solutionStore == null) {
-            solutionStore = new solutionStore();
+            solutionStore = new SolutionStore();
         }
         return solutionStore;
     }
@@ -17,7 +17,7 @@ public class solutionStore {
 
     private List<String> solutions;
 
-    private solutionStore() {
+    private SolutionStore() {
         blockers = new ArrayList<>();
         solutions = new ArrayList<>();
     }
