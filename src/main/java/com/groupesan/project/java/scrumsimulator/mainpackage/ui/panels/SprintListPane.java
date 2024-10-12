@@ -1,7 +1,6 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels;
 
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.Sprint;
-import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SprintFactory;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SprintStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.BaseComponent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.SprintWidget;
@@ -19,11 +18,12 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 public class SprintListPane extends JFrame implements BaseComponent {
+    private List<SprintWidget> widgets = new ArrayList<>();
+    private JPanel subPanel;  
+
     public SprintListPane() {
         this.init();
     }
-
-    private List<SprintWidget> widgets = new ArrayList<>();
 
     public void init() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -35,30 +35,18 @@ public class SprintListPane extends JFrame implements BaseComponent {
         myJpanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         myJpanel.setLayout(myGridbagLayout);
 
+        subPanel = new JPanel(new GridBagLayout());
 
-        for (Sprint sprint : SprintStore.getInstance().getSprints()) {
-            widgets.add(new SprintWidget(sprint));
-        }
+        refreshSprintList();
 
-        JPanel subPanel = new JPanel();
-        subPanel.setLayout(new GridBagLayout());
-        int i = 0;
-        for (SprintWidget widget : widgets) {
-            subPanel.add(
-                    widget,
-                    new CustomConstraints(
-                            0,
-                            i++,
-                            GridBagConstraints.WEST,
-                            1.0,
-                            0.1,
-                            GridBagConstraints.HORIZONTAL));
-        }
+        JScrollPane scrollPane = new JScrollPane(subPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         myJpanel.add(
-                new JScrollPane(subPanel),
+                scrollPane,
                 new CustomConstraints(
-                        0, 0, GridBagConstraints.WEST, 1.0, 0.8, GridBagConstraints.HORIZONTAL));
+                        0, 0, GridBagConstraints.WEST, 1.0, 0.8, GridBagConstraints.BOTH));  
 
         JButton newSprintButton = new JButton("New Sprint");
         newSprintButton.addActionListener(
@@ -67,9 +55,7 @@ public class SprintListPane extends JFrame implements BaseComponent {
                     public void actionPerformed(ActionEvent e) {
                         NewSprintForm form = new NewSprintForm();
                         form.setVisible(true);
-                        //close the sprint list with outdated information
-                        dispose();
-                        
+                        dispose();  
                     }
                 });
         myJpanel.add(
@@ -78,5 +64,23 @@ public class SprintListPane extends JFrame implements BaseComponent {
                         0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
 
         add(myJpanel);
+    }
+
+    private void refreshSprintList() {
+        subPanel.removeAll();  
+        widgets.clear();  
+
+        int i = 0;
+        for (Sprint sprint : SprintStore.getInstance().getSprints()) {
+            SprintWidget widget = new SprintWidget(sprint);
+            widgets.add(widget);  
+            subPanel.add(
+                    widget,
+                    new CustomConstraints(
+                            0, i++, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL));
+        }
+
+        subPanel.revalidate();
+        subPanel.repaint();
     }
 }

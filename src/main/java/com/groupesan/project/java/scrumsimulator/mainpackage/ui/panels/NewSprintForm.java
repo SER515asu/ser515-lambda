@@ -63,41 +63,27 @@ public class NewSprintForm extends JFrame implements BaseComponent {
         setLayout(myBorderLayout);
 
         JLabel nameLabel = new JLabel("Name:");
-        myJpanel.add(
-                nameLabel,
-                new CustomConstraints(
-                        0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
-        myJpanel.add(
-                nameField,
-                new CustomConstraints(
-                        1, 0, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(nameLabel,
+                new CustomConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(nameField,
+                new CustomConstraints(1, 0, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
 
         JLabel descLabel = new JLabel("Description:");
-        myJpanel.add(
-                descLabel,
-                new CustomConstraints(
-                        0, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL));
-        myJpanel.add(
-                new JScrollPane(descArea),
-                new CustomConstraints(
-                        1, 1, GridBagConstraints.EAST, 1.0, 0.3, GridBagConstraints.BOTH));
+        myJpanel.add(descLabel,
+                new CustomConstraints(0, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(new JScrollPane(descArea),
+                new CustomConstraints(1, 1, GridBagConstraints.EAST, 1.0, 0.3, GridBagConstraints.BOTH));
 
         JLabel pointsLabel = new JLabel("Length (Days):");
-        myJpanel.add(
-                pointsLabel,
-                new CustomConstraints(
-                        0, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
-        myJpanel.add(
-                sprintDays,
-                new CustomConstraints(
-                        1, 2, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.WEST));
+        myJpanel.add(pointsLabel,
+                new CustomConstraints(0, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(sprintDays,
+                new CustomConstraints(1, 2, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.WEST));
 
         // Start Date
         JLabel startDateLabel = new JLabel("Start Date:");
-        myJpanel.add(
-                startDateLabel,
-                new CustomConstraints(
-                        0, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(startDateLabel,
+                new CustomConstraints(0, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 
         JPanel startDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         startDaySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
@@ -110,17 +96,13 @@ public class NewSprintForm extends JFrame implements BaseComponent {
         startDatePanel.add(new JLabel("Year:"));
         startDatePanel.add(startYearSpinner);
 
-        myJpanel.add(
-                startDatePanel,
-                new CustomConstraints(
-                        1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(startDatePanel,
+                new CustomConstraints(1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
 
         // End Date
         JLabel endDateLabel = new JLabel("End Date:");
-        myJpanel.add(
-                endDateLabel,
-                new CustomConstraints(
-                        0, 4, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(endDateLabel,
+                new CustomConstraints(0, 4, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 
         JPanel endDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         endDaySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
@@ -133,65 +115,22 @@ public class NewSprintForm extends JFrame implements BaseComponent {
         endDatePanel.add(new JLabel("Year:"));
         endDatePanel.add(endYearSpinner);
 
-        myJpanel.add(
-                endDatePanel,
-                new CustomConstraints(
-                        1, 4, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(endDatePanel,
+                new CustomConstraints(1, 4, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
 
-        // Add dropdown for selecting number of sprints
         JLabel sprintCountLabel = new JLabel("Number of Sprints:");
-        sprintCountDropdown = new JComboBox<>(new String[] {"1", "2", "3"});
-        
-        myJpanel.add(
-                sprintCountLabel,
-                new CustomConstraints(
-                        0, 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
-        myJpanel.add(
-                sprintCountDropdown,
-                new CustomConstraints(
-                        1, 5, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+        sprintCountDropdown = new JComboBox<>(new String[]{"1", "2", "3"});
+
+        myJpanel.add(sprintCountLabel,
+                new CustomConstraints(0, 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(sprintCountDropdown,
+                new CustomConstraints(1, 5, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
 
         JButton cancelButton = new JButton("Cancel");
-
-        cancelButton.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        dispose();
-                    }
-                });
+        cancelButton.addActionListener(e -> dispose());
 
         JButton submitButton = new JButton("Submit");
-
-        submitButton.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (User.getCurrentUser(null, null) == null) {
-                            System.out.println("User instance is null");
-                            SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
-                            feedbackPanelUI.setVisible(true);
-                        } else if (User.getCurrentUser(null, null).getRole() == null) {
-                            System.out.println("User role is null");
-                            SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
-                            feedbackPanelUI.setVisible(true);
-                        } else {
-                            String roleName = User.getCurrentUser(null, null).getRole().getName();
-                            System.out.println("current role: " + roleName);
-                            if (roleName.equals("Scrum Master")) {
-                                getSprintObject();
-                                System.out.println("Sprint created");
-                                SprintListPane sprintListUI = new SprintListPane();
-                                sprintListUI.setVisible(true);
-                                dispose();
-                            } else {
-                                SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
-                                feedbackPanelUI.setVisible(true);
-                                System.out.println("Wrong role");
-                            }
-                        }
-                    }
-                });
+        submitButton.addActionListener(e -> handleSubmit());
 
         listModel = new DefaultListModel<>();
         for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
@@ -203,21 +142,54 @@ public class NewSprintForm extends JFrame implements BaseComponent {
         JScrollPane scrollPane = new JScrollPane(usList);
         scrollPane.setPreferredSize(new Dimension(300, 100));
 
-        myJpanel.add(
-                cancelButton,
+        myJpanel.add(cancelButton,
                 new CustomConstraints(0, 6, GridBagConstraints.EAST, GridBagConstraints.NONE));
-        myJpanel.add(
-                submitButton,
+        myJpanel.add(submitButton,
                 new CustomConstraints(1, 6, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         add(myJpanel);
+    }
+
+    private void handleSubmit() {
+        if (User.getCurrentUser(null, null) == null) {
+            System.out.println("User instance is null");
+            SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
+            feedbackPanelUI.setVisible(true);
+        } else if (User.getCurrentUser(null, null).getRole() == null) {
+            System.out.println("User role is null");
+            SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
+            feedbackPanelUI.setVisible(true);
+        } else {
+            String roleName = User.getCurrentUser(null, null).getRole().getName();
+            System.out.println("current role: " + roleName);
+            if (roleName.equals("Scrum Master")) {
+                createMultipleSprints(); // Call to create multiple sprints
+                SprintListPane sprintListUI = new SprintListPane();
+                sprintListUI.setVisible(true);
+                dispose();
+            } else {
+                SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
+                feedbackPanelUI.setVisible(true);
+                System.out.println("Wrong role");
+            }
+        }
+    }
+
+    private void createMultipleSprints() {
+        int numSprints = Integer.parseInt((String) sprintCountDropdown.getSelectedItem());
+        
+        for (int i = 0; i < numSprints; i++) {
+            Sprint newSprint = getSprintObject(); // Create a new sprint
+            SprintStore.getInstance().addSprint(newSprint); // Add to store
+        }
+
+        System.out.println(numSprints + " sprints created");
     }
 
     public Sprint getSprintObject() {
         String name = nameField.getText();
         String description = descArea.getText();
         Integer length = (Integer) sprintDays.getValue();
-        String sprintCount = (String) sprintCountDropdown.getSelectedItem(); // Get selected number of sprints
 
         SprintFactory sprintFactory = SprintFactory.getSprintFactory();
         Sprint mySprint = sprintFactory.createNewSprint(name, description, length);
@@ -229,14 +201,27 @@ public class NewSprintForm extends JFrame implements BaseComponent {
             for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
                 if (stringIdentifier.equals(userStory.toString())) {
                     mySprint.addUserStory(userStory);
-                    break;
+                    break; // Stop searching after finding the matching user story
                 }
             }
         }
 
-        // Process sprintCount if needed in your logic
-        
-        SprintStore.getInstance().addSprint(mySprint);
+        // Set the start and end date for the sprint
+        int startDay = (Integer) startDaySpinner.getValue();
+        int startMonth = (Integer) startMonthSpinner.getValue();
+        int startYear = (Integer) startYearSpinner.getValue();
+        int endDay = (Integer) endDaySpinner.getValue();
+        int endMonth = (Integer) endMonthSpinner.getValue();
+        int endYear = (Integer) endYearSpinner.getValue();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(startYear, startMonth - 1, startDay); // Month is 0-indexed
+        Date startDate = calendar.getTime();
+        mySprint.setStartDate(startDate);
+
+        calendar.set(endYear, endMonth - 1, endDay);
+        Date endDate = calendar.getTime();
+        mySprint.setEndDate(endDate);
 
         return mySprint;
     }

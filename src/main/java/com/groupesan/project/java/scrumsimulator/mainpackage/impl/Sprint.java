@@ -2,6 +2,7 @@ package com.groupesan.project.java.scrumsimulator.mainpackage.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 public class Sprint {
     private ArrayList<UserStory> userStories = new ArrayList<>();
@@ -14,6 +15,8 @@ public class Sprint {
     private int remainingDays;
 
     private int id;
+    private Date startDate;
+    private Date endDate;
 
     public Sprint(String name, String description, int length, int id) {
         this.name = name;
@@ -53,6 +56,23 @@ public class Sprint {
 
     public int getId() {
         return id;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    // Getters for startDate and endDate (optional)
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
     }
 
     public String toString() {
