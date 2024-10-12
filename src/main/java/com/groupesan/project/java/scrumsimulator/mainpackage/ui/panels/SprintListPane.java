@@ -17,28 +17,44 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.InvalidInputWindow;
+import java.security.SecureRandom;
+
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SprintStore;
 
 public class SprintListPane extends JFrame implements BaseComponent {
     public SprintListPane() {
         this.init();
+        random = new SecureRandom();
+       
     }
+
+    private static int sprintCountSet = 0;
+    private SecureRandom random;
 
     private List<SprintWidget> widgets = new ArrayList<>();
 
     public void init() {
+        SprintStore sprintStore = SprintStore.getInstance();
+        int sprintCount = sprintStore.getSprints().size();
+        if (sprintCountSet != 0) {
+            if (sprintCount < sprintCountSet) {
+                int numAdd = sprintCountSet - sprintCount;
+                InvalidInputWindow invalidInputWindow = new InvalidInputWindow("You need to add " + numAdd + " more sprints.", "Warning");
+                invalidInputWindow.setVisible(true);
+            }
+        }
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("Sprints list");
-        setSize(400, 300);
+        setSize(800, 800);
 
         GridBagLayout myGridbagLayout = new GridBagLayout();
         JPanel myJpanel = new JPanel();
         myJpanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         myJpanel.setLayout(myGridbagLayout);
 
-        Sprint aSprint = SprintFactory.getSprintFactory().createNewSprint("foo", "bar", 2);
-        Sprint aSprint2 = SprintFactory.getSprintFactory().createNewSprint("foo2", "bar2", 4);
-        widgets.add(new SprintWidget(aSprint));
-        widgets.add(new SprintWidget(aSprint2));
 
         for (Sprint sprint : SprintStore.getInstance().getSprints()) {
             widgets.add(new SprintWidget(sprint));
@@ -69,33 +85,98 @@ public class SprintListPane extends JFrame implements BaseComponent {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        NewSprintForm form = new NewSprintForm();
-                        form.setVisible(true);
-
-                        form.addWindowListener(
-                                new java.awt.event.WindowAdapter() {
-                                    public void windowClosed(
-                                            java.awt.event.WindowEvent windowEvent) {
-                                        Sprint newSprint = form.getSprintObject();
-                                        widgets.add(new SprintWidget(newSprint));
-                                        int idx = widgets.size() - 1;
-                                        subPanel.add(
-                                                widgets.get(idx),
-                                                new CustomConstraints(
-                                                        0,
-                                                        idx,
-                                                        GridBagConstraints.WEST,
-                                                        1.0,
-                                                        0.1,
-                                                        GridBagConstraints.HORIZONTAL));
-                                    }
-                                });
+                        SprintStore sprintStore = SprintStore.getInstance();
+                        int sprintCount = sprintStore.getSprints().size();
+                        if (sprintCountSet != 0 && sprintCount >= sprintCountSet) {
+                           
+                                InvalidInputWindow invalidInputWindow = new InvalidInputWindow("You have enough sprints already.", "Warning");
+                                invalidInputWindow.setVisible(true);
+                            
+                        }
+                        else {
+                            NewSprintForm form = new NewSprintForm();
+                            form.setVisible(true);
+                        }
+                        //close the sprint list with outdated information
+                        dispose();
+                        
                     }
                 });
         myJpanel.add(
                 newSprintButton,
                 new CustomConstraints(
                         0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
+
+        JLabel maxNumSprints = new JLabel("Enter the maximum number of sprints:");
+        myJpanel.add(
+                maxNumSprints,
+                new CustomConstraints(
+                    0, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+
+        JTextField maxNumSprintsField = new JTextField();
+        myJpanel.add(
+            maxNumSprintsField,
+            new CustomConstraints(
+                        1, 2, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+
+        
+        JLabel minNumSprints = new JLabel("Enter the minimum number of sprints: ");
+        myJpanel.add(
+                minNumSprints,
+                new CustomConstraints(
+                    0, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+
+        JTextField minNumSprintsField = new JTextField();
+        myJpanel.add(
+            minNumSprintsField,
+            new CustomConstraints(
+                        1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+        
+        JButton rangeNumSprintsButton = new JButton("Confirm the Range");
+        rangeNumSprintsButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String maxDaysInput = maxNumSprintsField.getText();
+                        String minDaysInput = minNumSprintsField.getText();
+                        int maxDays = 0;
+                        int minDays = 0;
+                        try {
+                            maxDays = Integer.parseInt(maxDaysInput);
+                            minDays = Integer.parseInt(minDaysInput);
+                        }
+
+                        catch (NumberFormatException ex) {
+                            System.out.println("Please enter a valid number");
+                            InvalidInputWindow invalidInputWindow = new InvalidInputWindow("Must enter integers.", "Invalid Input");
+                            invalidInputWindow.setVisible(true);
+                            
+                        }
+
+                        if (minDays >= maxDays || minDays <= 0) {
+                            InvalidInputWindow invalidInputWindow = new InvalidInputWindow("Enter a valid range.", "Invalid Input");
+                            invalidInputWindow.setVisible(true);
+                        }
+                        else {
+                            //generate a random number
+
+                            int randomNum = random.nextInt((maxDays - minDays) + 1) + minDays;
+                            sprintCountSet = randomNum;
+                            InvalidInputWindow invalidInputWindow = new InvalidInputWindow("Sprint count is set to " + randomNum + ".", "Success");
+                            invalidInputWindow.setVisible(true);
+
+
+
+                        }
+                    }
+                }
+        );
+
+        myJpanel.add(
+                rangeNumSprintsButton,
+                new CustomConstraints(2, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE));
+
+
 
         add(myJpanel);
     }
