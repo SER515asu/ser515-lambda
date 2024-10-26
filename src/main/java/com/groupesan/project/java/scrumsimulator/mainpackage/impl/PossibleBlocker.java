@@ -25,7 +25,11 @@ public class PossibleBlocker {
         return name;
     }
 
-    public String print(){
-        return this.id + " - " + this.name + " - " + this.description;
+    public String print(boolean printId){
+        if(printId){
+            return this.id + " - " + this.name + " - " + this.description;
+        }
+
+        return this.name + " - " + this.description;
     }
 }
