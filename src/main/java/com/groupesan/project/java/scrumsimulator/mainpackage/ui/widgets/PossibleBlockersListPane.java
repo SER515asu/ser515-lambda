@@ -8,7 +8,9 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.NewPossib
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowListener;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -34,21 +36,77 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
         myJPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         // Dummy data
-        PossibleBlockersStore.getInstance().addNewBlocker(
-            new PossibleBlocker("Test 1", "It's a dummy desc for the possible blocker")
-        );
-        PossibleBlockersStore.getInstance().addNewBlocker(
-            new PossibleBlocker("Test 2", "It's a dummy desc for the possible blocker")
-        );
-        PossibleBlockersStore.getInstance().addNewBlocker(
-            new PossibleBlocker("Test 3", "It's a dummy desc for the possible blocker")
-        );
-        PossibleBlockersStore.getInstance().addNewBlocker(
-            new PossibleBlocker("Test 4", "It's a dummy desc for the possible blocker")
-        );
+        // PossibleBlockersStore.getInstance().addNewBlocker(
+        //     new PossibleBlocker("Test 1", "It's a dummy desc for the possible blocker")
+        // );
+        // PossibleBlockersStore.getInstance().addNewBlocker(
+        //     new PossibleBlocker("Test 2", "It's a dummy desc for the possible blocker")
+        // );
+        // PossibleBlockersStore.getInstance().addNewBlocker(
+        //     new PossibleBlocker("Test 3", "It's a dummy desc for the possible blocker")
+        // );
+        // PossibleBlockersStore.getInstance().addNewBlocker(
+        //     new PossibleBlocker("Test 4", "It's a dummy desc for the possible blocker")
+        // );
         
 
         _subPanel = new JPanel(new GridBagLayout());
+
+        loadOrReloadSubPannel();
+
+        myJPanel.add(
+            new JScrollPane(_subPanel),
+            new CustomConstraints(
+                0, 0, GridBagConstraints.WEST, 1.0, 0.8, GridBagConstraints.BOTH
+            )
+        );
+
+        JButton newBlockerButton = new JButton("New Possible Blocker");
+        newBlockerButton.addActionListener(
+            new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    NewPossibleBlockerForm form = new NewPossibleBlockerForm();
+                    form.setVisible(true);
+
+                    form.addWindowListener(new WindowListener() {
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+                            loadOrReloadSubPannel();
+                        }
+
+                        public void windowClosing(WindowEvent e)        {}
+                        public void windowOpened(WindowEvent e)         {}
+                        public void windowIconified(WindowEvent e)      {}
+                        public void windowDeiconified(WindowEvent e)    {}
+                        public void windowActivated(WindowEvent e)      {}
+                        public void windowDeactivated(WindowEvent e)    {}
+                    });
+                }
+            }
+        );
+
+        myJPanel.add(
+            newBlockerButton,
+            new CustomConstraints(
+                0, 1, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL
+            )
+        );
+
+        setContentPane(myJPanel);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private void loadOrReloadSubPannel(){
+        if(_subPanel == null){
+            return;
+        }
+
+        _subPanel.removeAll();
+
+        System.out.println("Size of PB: " + PossibleBlockersStore.getInstance().size());
 
         List<PossibleBlocker> blockers = PossibleBlockersStore.getInstance().getListOfPossibleBlockers();
         for (int i = 0; i < PossibleBlockersStore.getInstance().size(); i++) {
@@ -68,34 +126,7 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
             );
         }
 
-        myJPanel.add(
-            new JScrollPane(_subPanel),
-            new CustomConstraints(
-                0, 0, GridBagConstraints.WEST, 1.0, 0.8, GridBagConstraints.BOTH
-            )
-        );
-
-        JButton newBlockerButton = new JButton("New Possible Blocker");
-        newBlockerButton.addActionListener(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    NewPossibleBlockerForm form = new NewPossibleBlockerForm();
-                    form.setVisible(true);
-                }
-            }
-        );
-
-        myJPanel.add(
-            newBlockerButton,
-            new CustomConstraints(
-                0, 1, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL
-            )
-        );
-
-        setContentPane(myJPanel);
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
+        _subPanel.revalidate();
+        _subPanel.repaint();
     }
 }

@@ -1,6 +1,9 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels;
 
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlocker;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlockersStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStoryStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.BaseComponent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 import java.awt.BorderLayout;
@@ -21,7 +24,7 @@ import javax.swing.border.EmptyBorder;
 public class NewPossibleBlockerForm extends JFrame implements BaseComponent {
     private JTextField nameField = new JTextField();
     private JTextArea descArea = new JTextArea();
-    private JComboBox<String> userStoryComboBox;
+    private JComboBox<UserStory> userStoryComboBox;
 
     public NewPossibleBlockerForm() {
         this.init();
@@ -34,7 +37,7 @@ public class NewPossibleBlockerForm extends JFrame implements BaseComponent {
 
         nameField = new JTextField();
         descArea = new JTextArea();
-        userStoryComboBox = new JComboBox<>(new String[]{ "US1", "US2", "US3" });
+        userStoryComboBox = new JComboBox<>(UserStoryStore.getInstance().getUserStories().toArray(new UserStory[0]));
         // userStoryComboBox.setSelectedItem(userStoriesMap.values().toArray(new String[0])[0]);
 
         GridBagLayout myGridbagLayout = new GridBagLayout();
@@ -92,16 +95,14 @@ public class NewPossibleBlockerForm extends JFrame implements BaseComponent {
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // String name = nameField.getText();
-                    // String description = descArea.getText();
-                    // Double points = (Double) pointsCombo.getSelectedItem();
+                    String name = nameField.getText();
+                    String description = descArea.getText();
                     UserStory us = (UserStory) userStoryComboBox.getSelectedItem();
-                    System.out.println(us.getName());
-                    System.out.println(us.getId());
+                    
+                    PossibleBlockersStore.getInstance().addNewBlocker(
+                        new PossibleBlocker(name, description, us)
+                    );
 
-                    // userStory.setName(name);
-                    // userStory.setDescription(description);
-                    // userStory.setPointValue(points);
                     dispose();
                 }
             }
