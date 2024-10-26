@@ -6,11 +6,13 @@ public class PossibleBlocker {
     private String id;
     private String name;
     private String description;
+    private int probability;
 
     public PossibleBlocker(String name, String desc){
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = desc;
+        this.probability = 0;
     }
 
     public String getId() {
@@ -25,7 +27,11 @@ public class PossibleBlocker {
         return name;
     }
 
+    public String getProbability() {
+        return String.valueOf(probability);
+    }
+
     public String print(){
-        return this.id + " - " + this.name + " - " + this.description;
+        return this.id + " - " + this.name + " - " + this.description + " - " + this.probability;
     }
 }
