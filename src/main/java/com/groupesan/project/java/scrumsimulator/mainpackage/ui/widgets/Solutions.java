@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JDialog;
 import javax.swing.border.EmptyBorder;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SolutionStore;
 
 public class Solutions extends JFrame implements BaseComponent {
     private JPanel _subPanel;
@@ -41,16 +43,15 @@ public class Solutions extends JFrame implements BaseComponent {
         JPanel myJPanel = new JPanel(new GridBagLayout());
         myJPanel.setBorder(new EmptyBorder(20, 20, 20, 20)); // Add padding around the panel
 
-        // Dummy data
-        solutionList = new ArrayList<>(
-                Arrays.asList(
-                        "Dummy solution 1",
-                        "Dummy solution 2",
-                        "Dummy solution 3",
-                        "Dummy solution 4"));
+        // import actual solutions from the SolutionStore instance
+
+        SolutionStore solutionStore = SolutionStore.getInstance();
+        solutionList = solutionStore.getSolutions(blocker_id);
 
         _subPanel = new JPanel(new GridBagLayout());
-        refreshSolutions();
+        if (solutionList != null) {
+            refreshSolutions();
+        }
 
         // Scroll pane for the solutions
         JScrollPane scrollPane = new JScrollPane(_subPanel);
@@ -95,7 +96,7 @@ public class Solutions extends JFrame implements BaseComponent {
     }
 
     private void refreshSolutions() {
-        _subPanel.removeAll();
+        _subPanel.removeAll(); 
         for (int i = 0; i < solutionList.size(); i++) {
             String solution = solutionList.get(i);
             JLabel solutionLabel = new JLabel(solution);
@@ -122,11 +123,16 @@ public class Solutions extends JFrame implements BaseComponent {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String newSolution = solutionTextField.getText();
+                System.out.println(newSolution);
                 if (!newSolution.isEmpty()) {
-                    addSolution(newSolution);
-                    refreshSolutions();
+                    SolutionStore solutionStore = SolutionStore.getInstance();
+                    solutionStore.addSolution(newSolution, blocker_id);
+                    Solutions.this.dispose();
+                    new Solutions(blocker_id).setVisible(true);
                     dialog.dispose();
+                   
                 }
+                
             }
         });
 
