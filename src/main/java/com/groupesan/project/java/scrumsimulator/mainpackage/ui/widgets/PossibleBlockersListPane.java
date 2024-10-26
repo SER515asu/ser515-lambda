@@ -1,14 +1,14 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets;
 
-import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.PossibleBlockerWidget;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlocker;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlockersStore;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.NewPossibleBlockerForm;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -16,7 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
-import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.Solutions;
 
 public class PossibleBlockersListPane extends JFrame implements BaseComponent {
     private JPanel _subPanel;
@@ -53,14 +52,14 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
 
         List<PossibleBlocker> blockers = PossibleBlockersStore.getInstance().getListOfPossibleBlockers();
         for (int i = 0; i < PossibleBlockersStore.getInstance().size(); i++) {
-
             PossibleBlocker pbw = blockers.get(i);
-            JButton solutionListButton = new JButton(pbw.print());
+
+            JButton solutionListButton = new JButton(pbw.print(false));
             solutionListButton.addActionListener(e -> {
                 Solutions solutions = new Solutions(pbw.getId());
                 solutions.setVisible(true);
-
             });
+
             _subPanel.add(
                 solutionListButton,
                 new CustomConstraints(
@@ -76,7 +75,16 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
             )
         );
 
-        JButton newBlockerButton = new JButton("New Blocker Story");
+        JButton newBlockerButton = new JButton("New Possible Blocker");
+        newBlockerButton.addActionListener(
+            new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    NewPossibleBlockerForm form = new NewPossibleBlockerForm();
+                    form.setVisible(true);
+                }
+            }
+        );
 
         myJPanel.add(
             newBlockerButton,
