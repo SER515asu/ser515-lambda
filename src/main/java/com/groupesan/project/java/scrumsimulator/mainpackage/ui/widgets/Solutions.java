@@ -7,9 +7,8 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,6 +17,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JDialog;
 import javax.swing.border.EmptyBorder;
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SolutionStore;
 
 public class Solutions extends JFrame implements BaseComponent {
@@ -94,16 +96,52 @@ public class Solutions extends JFrame implements BaseComponent {
         setLocationRelativeTo(null);
         setVisible(true);
     }
+    private JLabel selectedSolutionLabel;
 
     private void refreshSolutions() {
         _subPanel.removeAll(); 
         for (int i = 0; i < solutionList.size(); i++) {
             String solution = solutionList.get(i);
             JLabel solutionLabel = new JLabel(solution);
+            final int index = i;
+            if (i == 0 && selectedSolutionLabel == null) {
+                solutionLabel.setOpaque(true);
+                solutionLabel.setBackground(Color.LIGHT_GRAY); 
+                solutionLabel.setToolTipText("Best possible solution");
+                selectedSolutionLabel = solutionLabel; 
+            }
+            solutionLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (selectedSolutionLabel != null) {
+                        selectedSolutionLabel.setBackground(null);
+                        selectedSolutionLabel.setToolTipText(null);
+                    }
+                    solutionLabel.setBackground(Color.LIGHT_GRAY);
+                    solutionLabel.setToolTipText("Best possible solution");
+                    selectedSolutionLabel = solutionLabel;
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    solutionLabel.setBackground(solutionLabel.getBackground() == null ? Color.LIGHT_GRAY.darker() : solutionLabel.getBackground().darker());
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    if (solutionLabel != selectedSolutionLabel) {
+                        solutionLabel.setBackground(null); 
+                    } else {
+                        solutionLabel.setBackground(Color.LIGHT_GRAY); 
+                    }
+                }
+            });
+            solutionLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            solutionLabel.setOpaque(true);
             _subPanel.add(
                     solutionLabel,
                     new CustomConstraints(
-                            0, i, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL));
+                            0, index, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL));
         }
         _subPanel.revalidate();
         _subPanel.repaint();
