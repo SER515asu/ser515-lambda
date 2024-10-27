@@ -47,6 +47,7 @@ public class Solutions extends JFrame implements BaseComponent {
 
         SolutionStore solutionStore = SolutionStore.getInstance();
         solutionList = solutionStore.getSolutions(blocker_id);
+       
 
         _subPanel = new JPanel(new GridBagLayout());
         if (solutionList != null) {
@@ -99,6 +100,13 @@ public class Solutions extends JFrame implements BaseComponent {
         _subPanel.removeAll(); 
         for (int i = 0; i < solutionList.size(); i++) {
             String solution = solutionList.get(i);
+            //check if this solution is the best solution
+            SolutionStore solutionStore = SolutionStore.getInstance();
+            String bestSolution = solutionStore.getBestSolution(blocker_id);
+            if (bestSolution != null && bestSolution.equals(solution)) {
+                System.out.println("The best solution is: " + bestSolution);
+                //print best solution with a highlight
+            }
             JLabel solutionLabel = new JLabel(solution);
             _subPanel.add(
                     solutionLabel,
@@ -154,4 +162,5 @@ public class Solutions extends JFrame implements BaseComponent {
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }
+
 }
