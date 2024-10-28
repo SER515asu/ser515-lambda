@@ -15,7 +15,9 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
@@ -110,13 +112,29 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
 
         List<PossibleBlocker> blockers = PossibleBlockersStore.getInstance().getListOfPossibleBlockers();
         for (int i = 0; i < PossibleBlockersStore.getInstance().size(); i++) {
-            PossibleBlocker pbw = blockers.get(i);
+            PossibleBlocker pb = blockers.get(i);
 
-            JButton solutionListButton = new JButton(pbw.print(false));
-            solutionListButton.addActionListener(e -> {
-                Solutions solutions = new Solutions(pbw.getId());
+            JButton solutionListButton = new JButton(pb.print(false));
+
+            JPopupMenu popupMenu = new JPopupMenu();
+
+            JMenuItem viewSolitionsOption = new JMenuItem("View Solutions");
+            JMenuItem deleteOption = new JMenuItem("Delete");
+
+            viewSolitionsOption.addActionListener(e -> {
+                Solutions solutions = new Solutions(pb.getId());
                 solutions.setVisible(true);
             });
+
+            deleteOption.addActionListener(e -> {
+                PossibleBlockersStore.getInstance().deleteBlocker(pb);
+                loadOrReloadSubPannel();
+            });
+
+            popupMenu.add(viewSolitionsOption);
+            popupMenu.add(deleteOption);
+
+            solutionListButton.addActionListener(e -> popupMenu.show(solutionListButton, 0, solutionListButton.getHeight()));
 
             _subPanel.add(
                 solutionListButton,
