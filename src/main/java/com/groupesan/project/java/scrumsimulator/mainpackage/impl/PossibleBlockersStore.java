@@ -39,4 +39,16 @@ public class PossibleBlockersStore {
     public void deleteBlocker(PossibleBlocker blockerToDelete){
         this._blockers.remove(blockerToDelete.getId());
     }
+
+    public boolean checkUserStoryHasAnyBlockers(UserStory us){
+        for(PossibleBlocker pb: _blockers.values()){
+            if(pb.getUserStory().getId() != us.getId()){
+                continue;
+            }
+
+            return true;
+        }
+        
+        return false;
+    }
 }
