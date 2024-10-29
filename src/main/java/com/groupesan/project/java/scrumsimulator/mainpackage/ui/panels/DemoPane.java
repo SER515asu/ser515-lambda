@@ -6,6 +6,7 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.state.SimulationMan
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.SimulationStateManager;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.BaseComponent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.PossibleBlockersListPane;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.SpikesListPane;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.utils.WizardManager;
 import java.awt.GridBagConstraints;
@@ -268,11 +269,29 @@ public class DemoPane extends JFrame implements BaseComponent {
             }
         );
 
-        
         myJpanel.add(
             blockersViewButton,
             (new CustomConstraints(
                 3, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL
+            )).setGridWidth(2)
+        );
+
+        // Spikes View
+        JButton spikesViewButton = new JButton("Spikes");
+        spikesViewButton.addActionListener(
+            new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    SpikesListPane form = new SpikesListPane();
+                    form.setVisible(true);
+                }
+            }
+        );
+
+        myJpanel.add(
+            spikesViewButton,
+            (new CustomConstraints(
+                4, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL
             )).setGridWidth(2)
         );
 
