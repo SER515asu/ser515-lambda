@@ -7,12 +7,14 @@ public class PossibleBlocker {
     private String name;
     private String description;
     private UserStory userStory;
+    private PossibleBlockerState currentState;
 
     public PossibleBlocker(String name, String desc, UserStory userStory){
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = desc;
         this.userStory = userStory;
+        this.currentState = PossibleBlockerState.CREATED;
     }
 
     public String getId() {
@@ -31,6 +33,14 @@ public class PossibleBlocker {
         return this.userStory;
     }
 
+    public void changeBlockerStatus(PossibleBlockerState newStatus){
+        this.currentState = newStatus;
+    }
+
+    public PossibleBlockerState getCurrentState(){
+        return this.currentState;
+    }
+
     public String print(boolean printId){
         if(printId){
             return this.id + " - " + this.name + " - " + this.description;
@@ -39,3 +49,4 @@ public class PossibleBlocker {
         return this.name + " - " + this.description;
     }
 }
+
