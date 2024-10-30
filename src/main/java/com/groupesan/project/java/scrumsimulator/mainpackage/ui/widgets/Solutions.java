@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SolutionStore;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.InvalidInputWindow;
 
 public class Solutions extends JFrame implements BaseComponent {
     private JPanel _subPanel;
@@ -49,6 +50,7 @@ public class Solutions extends JFrame implements BaseComponent {
 
         SolutionStore solutionStore = SolutionStore.getInstance();
         solutionList = solutionStore.getSolutions(blocker_id);
+       
 
         _subPanel = new JPanel(new GridBagLayout());
         if (solutionList != null) {
@@ -102,14 +104,19 @@ public class Solutions extends JFrame implements BaseComponent {
         _subPanel.removeAll(); 
         for (int i = 0; i < solutionList.size(); i++) {
             String solution = solutionList.get(i);
+            //check if this solution is the best solution
+            SolutionStore solutionStore = SolutionStore.getInstance();
+            String bestSolution = solutionStore.getBestSolution(blocker_id);
             JLabel solutionLabel = new JLabel(solution);
-            final int index = i;
-            if (i == 0 && selectedSolutionLabel == null) {
-                solutionLabel.setOpaque(true);
-                solutionLabel.setBackground(Color.LIGHT_GRAY); 
+            if (bestSolution != null && bestSolution.equals(solution)) {
+                System.out.println("The best solution is: " + bestSolution);
+                //print best solution with a highlight
+                solutionLabel.setBackground(Color.LIGHT_GRAY);
                 solutionLabel.setToolTipText("Best possible solution");
-                selectedSolutionLabel = solutionLabel; 
+                selectedSolutionLabel = solutionLabel;
             }
+            //JLabel solutionLabel = new JLabel(solution);
+            final int index = i;
             solutionLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -120,6 +127,9 @@ public class Solutions extends JFrame implements BaseComponent {
                     solutionLabel.setBackground(Color.LIGHT_GRAY);
                     solutionLabel.setToolTipText("Best possible solution");
                     selectedSolutionLabel = solutionLabel;
+                    solutionStore.updateBestSolution(solution, blocker_id);
+                    InvalidInputWindow notification = new InvalidInputWindow("Best solution updated.", "Notification");
+                    notification.setVisible(true);
                 }
 
                 @Override
@@ -192,4 +202,5 @@ public class Solutions extends JFrame implements BaseComponent {
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }
+
 }
