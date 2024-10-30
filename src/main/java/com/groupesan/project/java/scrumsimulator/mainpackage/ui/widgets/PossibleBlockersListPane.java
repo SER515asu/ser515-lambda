@@ -12,11 +12,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.Solutions;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PossibleBlockersListPane extends JFrame implements BaseComponent {
     private JPanel _subPanel;
@@ -84,7 +89,25 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
                 0, 1, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL
             )
         );
+        
+        JButton fineTuneButton = new JButton("Fine Tune Probabilities");
+        fineTuneButton.addActionListener(
+            new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    FineTuneListPane form = new FineTuneListPane();
+                    form.setVisible(true);
+                }
+            }
+        );
 
+        myJPanel.add(
+            fineTuneButton,
+            new CustomConstraints(
+                0, 2, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL
+            )
+        );
+        
         setContentPane(myJPanel);
         pack();
         setLocationRelativeTo(null);
