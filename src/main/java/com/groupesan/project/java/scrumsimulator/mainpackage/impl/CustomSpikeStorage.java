@@ -22,6 +22,8 @@ public class CustomSpikeStorage {
         customSpikeMap.put(blockerId, customSpike);
     }
 
-    
+    public CustomSpike getCustomSpike(String blockerId) {
+        return customSpikeMap.get(blockerId);
+    }
     
 }
