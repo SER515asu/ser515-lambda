@@ -36,24 +36,27 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
         myJpanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         myJpanel.setLayout(myGridbagLayout);
 
-        for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
-            widgets.add(new UserStoryWidget(userStory, this));
-        }
-
         _subPanel = new JPanel();
         _subPanel.setLayout(new GridBagLayout());
-        int i = 0;
-        for (UserStoryWidget widget : widgets) {
-            _subPanel.add(
-                    widget,
-                    new CustomConstraints(
-                            0,
-                            i++,
-                            GridBagConstraints.WEST,
-                            1.0,
-                            0.1,
-                            GridBagConstraints.HORIZONTAL));
-        }
+        reloadUserStoryPannel();
+
+        // Voilates DRY code approach
+        // for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
+        //     widgets.add(new UserStoryWidget(userStory, this));
+        // }
+
+        // int i = 0;
+        // for (UserStoryWidget widget : widgets) {
+        //     _subPanel.add(
+        //             widget,
+        //             new CustomConstraints(
+        //                     0,
+        //                     i++,
+        //                     GridBagConstraints.WEST,
+        //                     1.0,
+        //                     0.1,
+        //                     GridBagConstraints.HORIZONTAL));
+        // }
 
         myJpanel.add(
             new JScrollPane(_subPanel),
