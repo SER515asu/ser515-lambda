@@ -21,8 +21,10 @@ import javax.swing.border.EmptyBorder;
 
 public class DemoPane extends JFrame implements BaseComponent {
     private Player player = new Player("bob", new ScrumRole("demo"));
+    private SimulationUI simulationUI;
 
     public DemoPane() {
+        this.simulationUI = new SimulationUI();
         this.init();
         player.doRegister();
     }
@@ -148,12 +150,9 @@ public class DemoPane extends JFrame implements BaseComponent {
 
         // Join Simulation button
         JButton joinSimulationButton = new JButton("Join Simulation");
-        joinSimulationButton.addActionListener(
-            e -> {
-                SimulationUI simulationUserInterface = new SimulationUI();
-                simulationUserInterface.setVisible(true);
-            }
-        );
+        joinSimulationButton.addActionListener(e -> simulationUI.startSimulationSelection());
+        myJpanel.add(joinSimulationButton, new CustomConstraints(6, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
+
 
         myJpanel.add(
             joinSimulationButton,
@@ -282,7 +281,7 @@ public class DemoPane extends JFrame implements BaseComponent {
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    SpikesListPane form = new SpikesListPane();
+                    SpikesListPane form = new SpikesListPane(simulationUI); // Pass simulationUI instance
                     form.setVisible(true);
                 }
             }

@@ -1,32 +1,27 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets;
 
-import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.PossibleBlockerWidget;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.BaseComponent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
-import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlocker;
-import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlockersStore;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.SimulationUI;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.event.ActionListener;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.Solutions;
+import java.awt.event.ActionListener;
 
 public class SpikesListPane extends JFrame implements BaseComponent {
     private JPanel _subPanel;
+    private SimulationUI simulationUI; // Reference to SimulationUI for role verification
 
-    public SpikesListPane() {
+    /**
+     * Constructor for SpikesListPane. Takes an instance of SimulationUI for role verification.
+     *
+     * @param simulationUI The main simulation UI instance to access the selected role.
+     */
+    public SpikesListPane(SimulationUI simulationUI) {
+        this.simulationUI = simulationUI; 
         this.init();
     }
 
@@ -58,7 +53,14 @@ public class SpikesListPane extends JFrame implements BaseComponent {
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JOptionPane.showMessageDialog(null, "Role Verified!");
+                    String enteredRole = (String) roleDropdown.getSelectedItem(); 
+                    String selectedRole = simulationUI.getUserRole(); 
+                    
+                    if (enteredRole.equals(selectedRole)) {
+                        JOptionPane.showMessageDialog(null, "Role Verified!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Role Verification Failed! Please select the correct role.");
+                    }
                 }
             }
         );
