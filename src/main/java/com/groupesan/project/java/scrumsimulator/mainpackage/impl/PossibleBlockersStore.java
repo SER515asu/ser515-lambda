@@ -51,4 +51,20 @@ public class PossibleBlockersStore {
         
         return false;
     }
+
+    public boolean checkUserStoryWithBlockerState(UserStory us, PossibleBlockerState pbs){
+        for(PossibleBlocker pb: _blockers.values()){
+            if(pb.getUserStory().getId() != us.getId()){
+                continue;
+            }
+
+            if(pb.getCurrentState() != pbs){
+                break;
+            }
+            
+            return true;
+        }
+        
+        return false;
+    }
 }
