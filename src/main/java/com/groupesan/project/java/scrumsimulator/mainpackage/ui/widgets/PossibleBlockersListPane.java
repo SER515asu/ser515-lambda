@@ -82,6 +82,15 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
         );
 
         JButton newBlockerButton = new JButton("New Blocker Story");
+        newBlockerButton.addActionListener(
+            new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    NewBlockerListPane formb = new NewBlockerListPane();
+                    formb.setVisible(true);
+                }
+            }
+        );
 
         myJPanel.add(
             newBlockerButton,
