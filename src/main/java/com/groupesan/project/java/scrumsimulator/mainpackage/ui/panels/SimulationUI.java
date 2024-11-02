@@ -18,7 +18,14 @@ public class SimulationUI extends JFrame implements BaseComponent {
 
     /** Constructor for SimulationUI. It initializes the role selection process. */
     public SimulationUI() {
-        init();
+        init(); // Sets up the initial instruction panel
+    }
+
+    /**
+     * This method is called externally (from DemoPane) to start the simulation selection process.
+     */
+    public void startSimulationSelection() {
+        selectSimulation(); // Initiates the simulation selection process
     }
 
     // Method to select a simulation
@@ -26,30 +33,25 @@ public class SimulationUI extends JFrame implements BaseComponent {
         JSONArray simulations = getSimulations();
         if (simulations != null) {
             // Create a dialog to choose a simulation
-            // For simplicity, let's assume it's a list in a JOptionPane
             String[] simulationNames = new String[simulations.length()];
             for (int i = 0; i < simulations.length(); i++) {
                 JSONObject simulation = simulations.getJSONObject(i);
-                simulationNames[i] =
-                        simulation.getString("Name") + " - " + simulation.getString("ID");
+                simulationNames[i] = simulation.getString("Name") + " - " + simulation.getString("ID");
             }
-            String selectedSimulation =
-                    (String)
-                            JOptionPane.showInputDialog(
-                                    null,
-                                    "Select a Simulation:",
-                                    "Simulation Selection",
-                                    JOptionPane.QUESTION_MESSAGE,
-                                    null,
-                                    simulationNames,
-                                    simulationNames[0]);
+            String selectedSimulation = (String) JOptionPane.showInputDialog(
+                    this,
+                    "Select a Simulation:",
+                    "Simulation Selection",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    simulationNames,
+                    simulationNames[0]);
 
             // Store the selected simulation ID (extract from selectedSimulation)
             if (selectedSimulation != null) {
                 this.selectedSimulationId = selectedSimulation.split(" - ")[1];
+                selectUserRole(); 
             }
-
-            selectUserRole();
         }
     }
 
@@ -68,32 +70,26 @@ public class SimulationUI extends JFrame implements BaseComponent {
     /** Opens the RoleSelectionPane for the user to select their role. */
     private void selectUserRole() {
         RoleSelectionPane roleSelectionPane = new RoleSelectionPane(this::setUserRole);
-
-        // Set the SimulationUI as the parent of RoleSelectionPane
         roleSelectionPane.setLocationRelativeTo(this);
-
-        // Make the RoleSelectionPane stay on top
         roleSelectionPane.setAlwaysOnTop(true);
-
         roleSelectionPane.setVisible(true);
     }
 
     /**
      * Sets the user role for the simulation and initializes the UI accordingly.
-     *
+*
      * @param role The role selected by the user.
      */
-    void setUserRole(String role) {
+    private void setUserRole(String role) {
         this.userRole = role;
-        updateUI();
+        showSimulationUI(); 
     }
 
-    private void updateUI() {
-        panel.removeAll(); // Clear the initial prompt
+    private void showSimulationUI() {
+        panel.removeAll();
         panel.add(new JLabel("Welcome to the Simulation"));
         if (userRole != null) {
             panel.add(new JLabel("Your Role: " + userRole));
-            // Add role-specific UI components here
         }
         if (selectedSimulationId != null) {
             panel.add(new JLabel("Selected Simulation ID: " + selectedSimulationId));
@@ -101,7 +97,9 @@ public class SimulationUI extends JFrame implements BaseComponent {
         revalidate();
         repaint();
     }
-
+    public String getUserRole() {
+        return userRole; 
+    }
     /**
      * Initializes the user interface components. This method is called after the user role has been
      * set.
@@ -112,11 +110,8 @@ public class SimulationUI extends JFrame implements BaseComponent {
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         panel = new JPanel();
-        panel.add(
-                new JLabel(
-                        "Please select an active Simulation, then a role to join the Simulation"));
+        panel.add(new JLabel("Please select an active Simulation, then a role to join the Simulation"));
         setContentPane(panel);
-        setVisible(true); // Make the UI visible first
-        selectSimulation(); // Then start the simulation selection process
+        setVisible(true); 
     }
 }

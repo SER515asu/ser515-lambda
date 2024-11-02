@@ -7,12 +7,14 @@ public class PossibleBlocker {
     private String name;
     private String description;
     private UserStory userStory;
+    private int probability;
 
     public PossibleBlocker(String name, String desc, UserStory userStory){
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = desc;
         this.userStory = userStory;
+        this.probability = 0;
     }
 
     public String getId() {
@@ -29,6 +31,13 @@ public class PossibleBlocker {
 
     public UserStory getUserStory(){
         return this.userStory;
+    }
+    public String getProbability() {
+        return String.valueOf(probability);
+    }
+
+    public String print(){
+        return this.id + " - " + this.name + " - " + this.description + " - " + this.probability;
     }
 
     public String print(boolean printId){
