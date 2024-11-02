@@ -1,13 +1,9 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets;
-
-import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,7 +17,10 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SolutionStore;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.CustomSpikeStorage;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.CustomSpike;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.InvalidInputWindow;
+import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 
 public class Solutions extends JFrame implements BaseComponent {
     private JPanel _subPanel;
@@ -41,12 +40,10 @@ public class Solutions extends JFrame implements BaseComponent {
     public void init() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("Solutions for " + blocker_id);
-        setSize(800, 300);
+        setSize(800, 400); 
 
         JPanel myJPanel = new JPanel(new GridBagLayout());
-        myJPanel.setBorder(new EmptyBorder(20, 20, 20, 20)); // Add padding around the panel
-
-        // import actual solutions from the SolutionStore instance
+        myJPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
         SolutionStore solutionStore = SolutionStore.getInstance();
         solutionList = solutionStore.getSolutions(blocker_id);
@@ -57,22 +54,21 @@ public class Solutions extends JFrame implements BaseComponent {
             refreshSolutions();
         }
 
-        // Scroll pane for the solutions
         JScrollPane scrollPane = new JScrollPane(_subPanel);
+        scrollPane.setPreferredSize(new java.awt.Dimension(500, 150));
 
         GridBagConstraints scrollPaneConstraints = new GridBagConstraints();
         scrollPaneConstraints.gridx = 0;
         scrollPaneConstraints.gridy = 0;
         scrollPaneConstraints.gridwidth = GridBagConstraints.REMAINDER;
-        scrollPaneConstraints.gridheight = GridBagConstraints.RELATIVE;
         scrollPaneConstraints.weightx = 1.0;
-        scrollPaneConstraints.weighty = 1.0; // Make the scroll panel take up most of the space
+        scrollPaneConstraints.weighty = 1.0;
         scrollPaneConstraints.fill = GridBagConstraints.BOTH;
         scrollPaneConstraints.anchor = GridBagConstraints.NORTH;
-
         myJPanel.add(scrollPane, scrollPaneConstraints);
 
-        // Add button to create new solutions
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+
         JButton createSolutionButton = new JButton("Create New Solution");
         createSolutionButton.addActionListener(new ActionListener() {
             @Override
@@ -81,33 +77,63 @@ public class Solutions extends JFrame implements BaseComponent {
             }
         });
 
-        // Place the button at the bottom with some space in between
-        GridBagConstraints buttonConstraints = new GridBagConstraints();
-        buttonConstraints.gridx = 0;
-        buttonConstraints.gridy = GridBagConstraints.RELATIVE;
-        buttonConstraints.weightx = 1.0;
-        buttonConstraints.weighty = 0.0; // Don't expand vertically
-        buttonConstraints.insets = new java.awt.Insets(20, 0, 0, 0); // Add some space above the button
-        buttonConstraints.fill = GridBagConstraints.HORIZONTAL;
-        buttonConstraints.anchor = GridBagConstraints.SOUTH; // Align it to the bottom
+        JButton createSpikeButton = new JButton("Create New Spike");
+        createSpikeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openCreateSpikeDialog();
+            }
+        });
 
-        myJPanel.add(createSolutionButton, buttonConstraints);
+        GridBagConstraints solutionButtonConstraints = new GridBagConstraints();
+        solutionButtonConstraints.gridx = 0;
+        solutionButtonConstraints.gridy = 0;
+        solutionButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+        solutionButtonConstraints.insets = new java.awt.Insets(10, 0, 5, 0);
+        buttonPanel.add(createSolutionButton, solutionButtonConstraints);
+
+        GridBagConstraints spikeButtonConstraints = new GridBagConstraints();
+        spikeButtonConstraints.gridx = 0;
+        spikeButtonConstraints.gridy = 1;
+        spikeButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+        spikeButtonConstraints.insets = new java.awt.Insets(5, 0, 10, 0);
+        buttonPanel.add(createSpikeButton, spikeButtonConstraints);
+
+        GridBagConstraints buttonPanelConstraints = new GridBagConstraints();
+        buttonPanelConstraints.gridx = 0;
+        buttonPanelConstraints.gridy = 1;
+        buttonPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
+        myJPanel.add(buttonPanel, buttonPanelConstraints);
 
         setContentPane(myJPanel);
-        pack();
         setLocationRelativeTo(null);
         setVisible(true);
     }
     private JLabel selectedSolutionLabel;
 
     private void refreshSolutions() {
-        _subPanel.removeAll(); 
+        _subPanel.removeAll();
+        
         for (int i = 0; i < solutionList.size(); i++) {
             String solution = solutionList.get(i);
             //check if this solution is the best solution
             SolutionStore solutionStore = SolutionStore.getInstance();
             String bestSolution = solutionStore.getBestSolution(blocker_id);
             JLabel solutionLabel = new JLabel(solution);
+
+    
+            solutionLabel.setFont(solutionLabel.getFont().deriveFont(15f)); 
+    
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.gridx = 0;
+            constraints.gridy = i;
+            constraints.anchor = GridBagConstraints.WEST;
+            constraints.fill = GridBagConstraints.HORIZONTAL;
+            constraints.weightx = 1.0;
+            constraints.insets = new java.awt.Insets(2, 5, 2, 5); 
+    
+            _subPanel.add(solutionLabel, constraints);
+
             if (bestSolution != null && bestSolution.equals(solution)) {
                 System.out.println("The best solution is: " + bestSolution);
                 //print best solution with a highlight
@@ -152,35 +178,31 @@ public class Solutions extends JFrame implements BaseComponent {
                     solutionLabel,
                     new CustomConstraints(
                             0, index, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL));
+
         }
+        
         _subPanel.revalidate();
         _subPanel.repaint();
     }
 
     private void openCreateSolutionDialog() {
         JDialog dialog = new JDialog(this, "Add New Solution", true);
-        dialog.setSize(400, 200); // Increase the size of the dialog
+        dialog.setSize(600, 300);
         dialog.setLayout(new GridBagLayout());
 
-        JTextField solutionTextField = new JTextField(30); // Increased size of the entry box
-        solutionTextField.setPreferredSize(new java.awt.Dimension(300, 30)); // Set preferred size for the text field
+        JTextField solutionTextField = new JTextField(30);
 
         JButton submitButton = new JButton("Submit");
-
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String newSolution = solutionTextField.getText();
-                System.out.println(newSolution);
                 if (!newSolution.isEmpty()) {
                     SolutionStore solutionStore = SolutionStore.getInstance();
                     solutionStore.addSolution(newSolution, blocker_id);
-                    Solutions.this.dispose();
-                    new Solutions(blocker_id).setVisible(true);
                     dialog.dispose();
-                   
+                    new Solutions(blocker_id).setVisible(true);
                 }
-                
             }
         });
 
@@ -188,17 +210,107 @@ public class Solutions extends JFrame implements BaseComponent {
         textFieldConstraints.gridx = 0;
         textFieldConstraints.gridy = 0;
         textFieldConstraints.fill = GridBagConstraints.HORIZONTAL;
-        textFieldConstraints.insets = new java.awt.Insets(10, 10, 10, 10); // Add padding around the text field
+        textFieldConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
 
         GridBagConstraints buttonConstraints = new GridBagConstraints();
         buttonConstraints.gridx = 0;
         buttonConstraints.gridy = 1;
         buttonConstraints.fill = GridBagConstraints.HORIZONTAL;
-        buttonConstraints.insets = new java.awt.Insets(10, 10, 10, 10); // Add padding around the button
+        buttonConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
 
         dialog.add(solutionTextField, textFieldConstraints);
         dialog.add(submitButton, buttonConstraints);
 
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
+
+    private void openCreateSpikeDialog() {
+        JDialog dialog = new JDialog(this, "Add New Spike", true);
+        dialog.setSize(600, 400);
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        JLabel titleLabel = new JLabel("Spike Title:");
+        JTextField titleTextField = new JTextField(30);
+
+        JLabel descriptionLabel = new JLabel("Description:");
+        JTextField descriptionTextField = new JTextField(30);
+
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String title = titleTextField.getText();
+                String description = descriptionTextField.getText();
+                if (!title.isEmpty() && !description.isEmpty()) {
+                    System.out.println("Spike Title: " + title);
+                    System.out.println("Spike Description: " + description);
+                    CustomSpike spike = new CustomSpike(title, description);
+                    CustomSpikeStorage spikeStorage = CustomSpikeStorage.getInstance();
+                    //check if a spike for the blocker already exists
+                    if (spikeStorage.getCustomSpike(blocker_id) == null) {
+                        spikeStorage.addCustomSpike(blocker_id, spike);
+                        dialog.dispose();
+                    }
+                    else {
+                        InvalidInputWindow invalidInputWindow = new InvalidInputWindow("Resolve the previous spike first.", "Warning");
+                        invalidInputWindow.setAlwaysOnTop(true);
+                        invalidInputWindow.setLocationRelativeTo(dialog);
+                        invalidInputWindow.setVisible(true);
+                        System.out.println(spikeStorage.getCustomSpike(blocker_id).getSpikeTitle());
+                    }
+                    
+                }
+                else {
+                    InvalidInputWindow invalidInputWindow = new InvalidInputWindow("Please fill in all fields.", "Warning");
+                    invalidInputWindow.setAlwaysOnTop(true);
+                    invalidInputWindow.setLocationRelativeTo(dialog);
+                    invalidInputWindow.setVisible(true);
+                }
+            }
+        });
+
+        GridBagConstraints titleLabelConstraints = new GridBagConstraints();
+        titleLabelConstraints.gridx = 0;
+        titleLabelConstraints.gridy = 0;
+        titleLabelConstraints.anchor = GridBagConstraints.WEST;
+        titleLabelConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+
+        GridBagConstraints titleTextFieldConstraints = new GridBagConstraints();
+        titleTextFieldConstraints.gridx = 1;
+        titleTextFieldConstraints.gridy = 0;
+        titleTextFieldConstraints.fill = GridBagConstraints.HORIZONTAL;
+        titleTextFieldConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+
+        GridBagConstraints descriptionLabelConstraints = new GridBagConstraints();
+        descriptionLabelConstraints.gridx = 0;
+        descriptionLabelConstraints.gridy = 1;
+        descriptionLabelConstraints.anchor = GridBagConstraints.WEST;
+        descriptionLabelConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+
+        GridBagConstraints descriptionTextFieldConstraints = new GridBagConstraints();
+        descriptionTextFieldConstraints.gridx = 1;
+        descriptionTextFieldConstraints.gridy = 1;
+        descriptionTextFieldConstraints.fill = GridBagConstraints.HORIZONTAL;
+        descriptionTextFieldConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+
+        GridBagConstraints buttonConstraints = new GridBagConstraints();
+        buttonConstraints.gridx = 0;
+        buttonConstraints.gridy = 2;
+        buttonConstraints.gridwidth = 2;
+        buttonConstraints.fill = GridBagConstraints.HORIZONTAL;
+        buttonConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
+
+        panel.add(titleLabel, titleLabelConstraints);
+        panel.add(titleTextField, titleTextFieldConstraints);
+        panel.add(descriptionLabel, descriptionLabelConstraints);
+        panel.add(descriptionTextField, descriptionTextFieldConstraints);
+        panel.add(submitButton, buttonConstraints);
+
+        dialog.add(panel);
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }

@@ -12,6 +12,7 @@ public class InvalidInputWindow  extends JDialog{
         setLayout(new BorderLayout());
         //center the window
         setLocationRelativeTo(null);
+        setModal(true);
 
         JLabel label = new JLabel(message);
         JButton ok = new JButton("OK");
