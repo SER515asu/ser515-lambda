@@ -34,4 +34,8 @@ public class PossibleBlocker {
     public String print(){
         return this.id + " - " + this.name + " - " + this.description + " - " + this.probability;
     }
+
+    public void setProbability(int probability) {
+        this.probability = probability;
+    }
 }
