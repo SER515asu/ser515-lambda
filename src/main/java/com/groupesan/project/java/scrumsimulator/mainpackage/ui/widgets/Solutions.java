@@ -13,6 +13,9 @@ import javax.swing.JTextField;
 import javax.swing.JDialog;
 import javax.swing.border.EmptyBorder;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SolutionStore;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.CustomSpikeStorage;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.CustomSpike;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.InvalidInputWindow;
 
 public class Solutions extends JFrame implements BaseComponent {
     private JPanel _subPanel;
@@ -187,7 +190,27 @@ public class Solutions extends JFrame implements BaseComponent {
                 if (!title.isEmpty() && !description.isEmpty()) {
                     System.out.println("Spike Title: " + title);
                     System.out.println("Spike Description: " + description);
-                    dialog.dispose();
+                    CustomSpike spike = new CustomSpike(title, description);
+                    CustomSpikeStorage spikeStorage = CustomSpikeStorage.getInstance();
+                    //check if a spike for the blocker already exists
+                    if (spikeStorage.getCustomSpike(blocker_id) == null) {
+                        spikeStorage.addCustomSpike(blocker_id, spike);
+                        dialog.dispose();
+                    }
+                    else {
+                        InvalidInputWindow invalidInputWindow = new InvalidInputWindow("Resolve the previous spike first.", "Warning");
+                        invalidInputWindow.setAlwaysOnTop(true);
+                        invalidInputWindow.setLocationRelativeTo(dialog);
+                        invalidInputWindow.setVisible(true);
+                        System.out.println(spikeStorage.getCustomSpike(blocker_id).getSpikeTitle());
+                    }
+                    
+                }
+                else {
+                    InvalidInputWindow invalidInputWindow = new InvalidInputWindow("Please fill in all fields.", "Warning");
+                    invalidInputWindow.setAlwaysOnTop(true);
+                    invalidInputWindow.setLocationRelativeTo(dialog);
+                    invalidInputWindow.setVisible(true);
                 }
             }
         });
