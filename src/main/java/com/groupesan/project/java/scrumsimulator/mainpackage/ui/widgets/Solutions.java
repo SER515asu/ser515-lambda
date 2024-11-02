@@ -20,6 +20,7 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SolutionStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.CustomSpikeStorage;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.CustomSpike;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.InvalidInputWindow;
+import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 
 public class Solutions extends JFrame implements BaseComponent {
     private JPanel _subPanel;
