@@ -1,5 +1,6 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets;
 
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlockersStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStoryStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.EditUserStoryForm;
@@ -20,10 +21,11 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     JLabel name;
     JLabel desc;
     JLabel businessValue; 
-    JLabel deleteIcon;
+    JLabel deleteOrProhibitedIcon;
 
     private UserStory userStory;
     private UserStoryListPane _userStoryListPane;
+    private boolean _userStoryHasBlocker = false;
 
     MouseAdapter openEditDialog = new MouseAdapter() {
         @Override
@@ -62,7 +64,13 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     }
 
     public void init() {
-        removeAll();        
+        removeAll();      
+        
+        _userStoryHasBlocker = PossibleBlockersStore.getInstance().checkUserStoryHasAnyBlockers(userStory);
+
+        if(_userStoryHasBlocker){
+            setBackground(Color.RED);
+        }
 
         id = new JLabel(userStory.getId().toString());
         id.addMouseListener(openEditDialog);
@@ -79,14 +87,17 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         businessValue = new JLabel(Double.toString(userStory.getBusinessValue()));
         businessValue.addMouseListener(openEditDialog);
         
-        deleteIcon = new JLabel(
+        deleteOrProhibitedIcon = new JLabel(
             new ImageIcon(
                 new ImageIcon(
-                    System.getProperty("user.dir") + "/assets/delete-icon.png"
+                    (System.getProperty("user.dir") + "/assets/") + ((!_userStoryHasBlocker)? "delete-icon.png" : "prohibited.png")
                 ).getImage().getScaledInstance(14, 14, Image.SCALE_SMOOTH)
             )
         );
-        deleteIcon.addMouseListener(deleteUserStory);
+
+        if(!_userStoryHasBlocker){
+            deleteOrProhibitedIcon.addMouseListener(deleteUserStory);
+        }
 
         GridBagLayout myGridBagLayout = new GridBagLayout();
         setLayout(myGridBagLayout);
@@ -132,7 +143,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         );
 
         add(
-            deleteIcon,
+            deleteOrProhibitedIcon,
             new CustomConstraints(
                 5, 0, GridBagConstraints.WEST, 
                 0.1, 0.0, GridBagConstraints.HORIZONTAL

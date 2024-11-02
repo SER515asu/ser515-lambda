@@ -5,11 +5,13 @@ on:
     branches:
       - main
       - Sprint-1
+      - Sprint-2
 
   push:
     branches:
       - main
       - Sprint-1
+      - Sprint-2
       
 jobs:
   build:
