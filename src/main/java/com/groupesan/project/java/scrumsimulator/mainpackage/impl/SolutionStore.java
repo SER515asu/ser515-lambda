@@ -21,10 +21,13 @@ public class SolutionStore {
 
     private HashMap<String, ArrayList<String>> blockerSolutionMap;
 
+    private HashMap<String, String> bestSolutions;
+
     private SolutionStore() {
         blockers = new ArrayList<>();
         //solutions = new ArrayList<>();
         blockerSolutionMap = new HashMap<>();
+        bestSolutions = new HashMap<>();
     }
 
     public void addBlocker(String blocker) {
@@ -53,5 +56,18 @@ public class SolutionStore {
     public void clearStore() {
         blockers.clear();
         blockerSolutionMap.clear();
+    }
+
+    public void updateBestSolution(String solution, String blocker_id) {
+        bestSolutions.put(blocker_id, solution);
+    }
+
+    public String getBestSolution(String blocker_id) {
+        if (bestSolutions != null && bestSolutions.containsKey(blocker_id)) {
+            return bestSolutions.get(blocker_id);
+        }
+        else {
+            return "No best solution stored";
+        }
     }
 }

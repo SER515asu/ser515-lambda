@@ -4,6 +4,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,6 +13,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JDialog;
 import javax.swing.border.EmptyBorder;
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SolutionStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.CustomSpikeStorage;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.CustomSpike;
@@ -42,6 +46,7 @@ public class Solutions extends JFrame implements BaseComponent {
 
         SolutionStore solutionStore = SolutionStore.getInstance();
         solutionList = solutionStore.getSolutions(blocker_id);
+       
 
         _subPanel = new JPanel(new GridBagLayout());
         if (solutionList != null) {
@@ -103,13 +108,18 @@ public class Solutions extends JFrame implements BaseComponent {
         setLocationRelativeTo(null);
         setVisible(true);
     }
+    private JLabel selectedSolutionLabel;
 
     private void refreshSolutions() {
         _subPanel.removeAll();
         
         for (int i = 0; i < solutionList.size(); i++) {
             String solution = solutionList.get(i);
+            //check if this solution is the best solution
+            SolutionStore solutionStore = SolutionStore.getInstance();
+            String bestSolution = solutionStore.getBestSolution(blocker_id);
             JLabel solutionLabel = new JLabel(solution);
+
     
             solutionLabel.setFont(solutionLabel.getFont().deriveFont(15f)); 
     
@@ -122,6 +132,52 @@ public class Solutions extends JFrame implements BaseComponent {
             constraints.insets = new java.awt.Insets(2, 5, 2, 5); 
     
             _subPanel.add(solutionLabel, constraints);
+
+            if (bestSolution != null && bestSolution.equals(solution)) {
+                System.out.println("The best solution is: " + bestSolution);
+                //print best solution with a highlight
+                solutionLabel.setBackground(Color.LIGHT_GRAY);
+                solutionLabel.setToolTipText("Best possible solution");
+                selectedSolutionLabel = solutionLabel;
+            }
+            //JLabel solutionLabel = new JLabel(solution);
+            final int index = i;
+            solutionLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (selectedSolutionLabel != null) {
+                        selectedSolutionLabel.setBackground(null);
+                        selectedSolutionLabel.setToolTipText(null);
+                    }
+                    solutionLabel.setBackground(Color.LIGHT_GRAY);
+                    solutionLabel.setToolTipText("Best possible solution");
+                    selectedSolutionLabel = solutionLabel;
+                    solutionStore.updateBestSolution(solution, blocker_id);
+                    InvalidInputWindow notification = new InvalidInputWindow("Best solution updated.", "Notification");
+                    notification.setVisible(true);
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    solutionLabel.setBackground(solutionLabel.getBackground() == null ? Color.LIGHT_GRAY.darker() : solutionLabel.getBackground().darker());
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    if (solutionLabel != selectedSolutionLabel) {
+                        solutionLabel.setBackground(null); 
+                    } else {
+                        solutionLabel.setBackground(Color.LIGHT_GRAY); 
+                    }
+                }
+            });
+            solutionLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            solutionLabel.setOpaque(true);
+            _subPanel.add(
+                    solutionLabel,
+                    new CustomConstraints(
+                            0, index, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL));
+
         }
         
         _subPanel.revalidate();
@@ -167,6 +223,7 @@ public class Solutions extends JFrame implements BaseComponent {
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }
+
 
     private void openCreateSpikeDialog() {
         JDialog dialog = new JDialog(this, "Add New Spike", true);
@@ -256,4 +313,5 @@ public class Solutions extends JFrame implements BaseComponent {
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }
+
 }
