@@ -1,20 +1,13 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets;
-
-import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.PossibleBlockerWidget;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlocker;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlockersStore;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -81,7 +74,25 @@ public class NewBlockerListPane extends JFrame implements BaseComponent {
         );
 
         JButton submitButton = new JButton("Submit Blocker");
-        submitButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "Blocker Submitted!"));
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = blockerName.getText().trim();
+                String description = blockerDescText.getText().trim();
+                String probabilityStr = (String) probabilityDropdown.getSelectedItem();
+                
+                if (!name.isEmpty() && !description.isEmpty() && probabilityStr != null) {
+                    int probability = Integer.parseInt(probabilityStr.replace("%", "").trim());
+                    PossibleBlocker newBlocker = new PossibleBlocker(name, description, probability);
+                    PossibleBlockersStore.getInstance().addNewBlocker(newBlocker);
+                    JOptionPane.showMessageDialog(null, "Blocker Submitted!");
+                    dispose(); 
+                    new PossibleBlockersListPane().loadOrReloadSubPanel(); 
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please fill in all fields.");
+                }
+            }
+        });
         myJPanel.add(
             submitButton,
             new CustomConstraints(0, 3, GridBagConstraints.CENTER, 2.0, 0.1, GridBagConstraints.HORIZONTAL)
