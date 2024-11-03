@@ -52,8 +52,8 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        NewBlockerListPane formb = new NewBlockerListPane();
-                        formb.setVisible(true);
+                        NewPossibleBlockerForm form = new NewPossibleBlockerForm();
+                        form.setVisible(true);
                     }
                 });
 
@@ -105,7 +105,7 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
 
                 state.addActionListener(e -> {
                     pb.changeBlockerStatus(pbs);
-                    loadOrReloadSubPannel();
+                    loadOrReloadSubPanel();
                 });
 
                 changeState.add(state);
@@ -113,7 +113,7 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
 
             popupMenu.add(changeState);
 
-            JMenuItem viewSolitionsOption = new JMenuItem("View Solutions");
+            JMenuItem viewSolutionsOption = new JMenuItem("View Solutions");
             JMenuItem deleteOption = new JMenuItem("Delete");
 
             viewSolutionsOption.addActionListener(e -> {
