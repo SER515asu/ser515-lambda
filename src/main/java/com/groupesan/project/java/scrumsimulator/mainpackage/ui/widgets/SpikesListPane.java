@@ -42,6 +42,7 @@ public class SpikesListPane extends JFrame implements BaseComponent {
         JPanel myJPanel = new JPanel(new GridBagLayout());
         myJPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
+
         // "Choose the Spike to Resolve" Label
         JLabel spikeResolve = new JLabel("Choose the Spike to Resolve: ");
         myJPanel.add(
