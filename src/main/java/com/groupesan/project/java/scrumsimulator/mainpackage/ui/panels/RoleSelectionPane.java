@@ -4,6 +4,9 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.BaseComp
 import java.awt.*;
 import java.util.function.Consumer;
 import javax.swing.*;
+import com.groupesan.project.java.scrumsimulator.mainpackage.core.User;
+import com.groupesan.project.java.scrumsimulator.mainpackage.core.ScrumRole;
+import com.groupesan.project.java.scrumsimulator.mainpackage.core.ScrumRole;
 
 /**
  * RoleSelectionPane provides a user interface for users to select their role in the simulation. It
@@ -33,13 +36,32 @@ public class RoleSelectionPane extends JFrame implements BaseComponent {
     public void init() {
         setLayout(new FlowLayout());
 
-        JButton pigButton = new JButton("Pig");
+        JButton pigButton = new JButton("Developer");
         JButton productOwnerButton = new JButton("Product Owner");
         JButton scrumMasterButton = new JButton("Scrum Master");
 
-        pigButton.addActionListener(e -> selectRole("Pig"));
-        productOwnerButton.addActionListener(e -> selectRole("Product Owner"));
-        scrumMasterButton.addActionListener(e -> selectRole("Scrum Master"));
+        pigButton.addActionListener(e -> {
+        selectRole("Developer");
+        ScrumRole currentRole = new ScrumRole("Developer");
+        //create the user instance or update the role
+        User.getCurrentUser("defaultName", currentRole);
+        JOptionPane.showMessageDialog(
+                null, "Switched to Developer", "Role Switching", JOptionPane.PLAIN_MESSAGE);}
+        );
+        productOwnerButton.addActionListener(e -> {selectRole("Product Owner");
+            ScrumRole currentRole = new ScrumRole("Product Owner");
+            //create the user instance or update the role
+            User.getCurrentUser("defaultName", currentRole);
+            JOptionPane.showMessageDialog(
+                null, "Switched to Product Owner", "Role Switching", JOptionPane.PLAIN_MESSAGE);
+        });
+        scrumMasterButton.addActionListener(e -> {selectRole("Scrum Master");
+            ScrumRole currentRole = new ScrumRole("Scrum Master");
+            //create the user instance or update the role
+            User.getCurrentUser("defaultName", currentRole);
+            JOptionPane.showMessageDialog(
+                null, "Switched to Scrum Master", "Role Switching", JOptionPane.PLAIN_MESSAGE);
+        });
 
         add(pigButton);
         add(productOwnerButton);
