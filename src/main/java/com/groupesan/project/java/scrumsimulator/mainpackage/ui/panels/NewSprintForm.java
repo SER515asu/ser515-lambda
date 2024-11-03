@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import com.groupesan.project.java.scrumsimulator.mainpackage.core.User;
 import java.awt.*;
 import java.util.Calendar;
@@ -23,6 +25,8 @@ public class NewSprintForm extends JFrame implements BaseComponent {
     SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(5, 1, 999999, 1);
     JSpinner sprintDays = new JSpinner(spinnerNumberModel);
     JComboBox<Integer> predefinedLengthsCombo;
+    JRadioButton manualLengthRadio;
+    JRadioButton predefinedLengthRadio;
 
     JSpinner startDaySpinner, startMonthSpinner, startYearSpinner;
     JSpinner endDaySpinner, endMonthSpinner, endYearSpinner;
@@ -68,38 +72,92 @@ public class NewSprintForm extends JFrame implements BaseComponent {
                 new CustomConstraints(
                         1, 1, GridBagConstraints.EAST, 1.0, 0.3, GridBagConstraints.BOTH));
 
-        // Length (Days) spinner
+        // Create radio buttons for length selection method
+        manualLengthRadio = new JRadioButton("Manual Length", true);
+        predefinedLengthRadio = new JRadioButton("Predefined Length", false);
+        ButtonGroup lengthGroup = new ButtonGroup();
+        lengthGroup.add(manualLengthRadio);
+        lengthGroup.add(predefinedLengthRadio);
+
+        // Manual Length panel
+        JPanel manualLengthPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel pointsLabel = new JLabel("Length (Days):");
+        manualLengthPanel.add(pointsLabel);
+        manualLengthPanel.add(sprintDays);
+        
+        // Predefined lengths panel
+        JPanel predefinedLengthPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel predefinedLabel = new JLabel("Predefined Sprint Lengths:");
+        Integer[] predefinedLengths = {7, 14, 21};
+        predefinedLengthsCombo = new JComboBox<>(predefinedLengths);
+        predefinedLengthPanel.add(predefinedLabel);
+        predefinedLengthPanel.add(predefinedLengthsCombo);
+
+        // Add radio buttons and panels
         myJpanel.add(
-                pointsLabel,
+                manualLengthRadio,
                 new CustomConstraints(
                         0, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
         myJpanel.add(
-                sprintDays,
+                manualLengthPanel,
                 new CustomConstraints(
-                        1, 2, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.WEST));
-
-        // Predefined lengths dropdown
-        JLabel predefinedLabel = new JLabel("Predefined Sprint Lengths:");
+                        1, 2, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
         myJpanel.add(
-                predefinedLabel,
+                predefinedLengthRadio,
                 new CustomConstraints(
                         0, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(
+                predefinedLengthPanel,
+                new CustomConstraints(
+                        1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
 
-        Integer[] predefinedLengths = {7, 14, 21};
-        predefinedLengthsCombo = new JComboBox<>(predefinedLengths);
-        predefinedLengthsCombo.addActionListener(new ActionListener() {
+        // Set initial state
+        predefinedLengthsCombo.setEnabled(false);
+
+        // Add listeners for radio buttons
+        manualLengthRadio.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Integer selectedLength = (Integer) predefinedLengthsCombo.getSelectedItem();
-                sprintDays.setValue(selectedLength);
+                sprintDays.setEnabled(true);
+                predefinedLengthsCombo.setEnabled(false);
             }
         });
 
-        myJpanel.add(
-                predefinedLengthsCombo,
-                new CustomConstraints(
-                        1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.WEST));
+        predefinedLengthRadio.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sprintDays.setEnabled(false);
+                predefinedLengthsCombo.setEnabled(true);
+                // Update sprint days with predefined value
+                sprintDays.setValue(predefinedLengthsCombo.getSelectedItem());
+            }
+        });
+
+        // Add listener for predefined lengths combo
+        predefinedLengthsCombo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (predefinedLengthsCombo.isEnabled()) {
+                    Integer selectedLength = (Integer) predefinedLengthsCombo.getSelectedItem();
+                    sprintDays.setValue(selectedLength);
+                }
+            }
+        });
+
+        // Add listener for manual spinner
+        sprintDays.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (sprintDays.isEnabled()) {
+                    // Optionally deselect predefined length if it matches the manual value
+                    Integer manualValue = (Integer) sprintDays.getValue();
+                    if (predefinedLengthsCombo.getSelectedItem() != null && 
+                        predefinedLengthsCombo.getSelectedItem().equals(manualValue)) {
+                        predefinedLengthsCombo.setSelectedIndex(-1);
+                    }
+                }
+            }
+        });
 
         // Start Date
         JLabel startDateLabel = new JLabel("Start Date:");
@@ -164,9 +222,9 @@ public class NewSprintForm extends JFrame implements BaseComponent {
                 new CustomConstraints(
                         0, 6, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL));
         myJpanel.add(
-                usList,
+                scrollPane,
                 new CustomConstraints(
-                        1, 6, GridBagConstraints.WEST, 1.0, 0.0, GridBagConstraints.NONE));
+                        1, 6, GridBagConstraints.EAST, 1.0, 0.3, GridBagConstraints.BOTH));
 
         // Buttons
         JButton cancelButton = new JButton("Cancel");
@@ -211,12 +269,14 @@ public class NewSprintForm extends JFrame implements BaseComponent {
                     }
                 });
 
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.add(cancelButton);
+        buttonPanel.add(submitButton);
+
         myJpanel.add(
-                cancelButton,
-                new CustomConstraints(2, 7, GridBagConstraints.EAST, GridBagConstraints.NONE));
-        myJpanel.add(
-                submitButton,
-                new CustomConstraints(3, 7, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                buttonPanel,
+                new CustomConstraints(
+                        1, 7, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
 
         add(myJpanel);
     }
@@ -258,8 +318,7 @@ public class NewSprintForm extends JFrame implements BaseComponent {
         Date endDate = calendar.getTime();
         mySprint.setEndDate(endDate);
 
-        System.out.println(mySprint);
-
         return mySprint;
     }
 }
+
