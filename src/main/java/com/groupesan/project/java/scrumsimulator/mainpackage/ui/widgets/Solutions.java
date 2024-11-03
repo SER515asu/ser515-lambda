@@ -21,6 +21,8 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.impl.CustomSpikeSto
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.CustomSpike;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.InvalidInputWindow;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
+import com.groupesan.project.java.scrumsimulator.mainpackage.core.User;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.SimulationSwitchRolePane;
 
 public class Solutions extends JFrame implements BaseComponent {
     private JPanel _subPanel;
@@ -73,7 +75,7 @@ public class Solutions extends JFrame implements BaseComponent {
         createSolutionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openCreateSolutionDialog();
+                openCreateSolutionDialog(Solutions.this);
             }
         });
 
@@ -81,7 +83,22 @@ public class Solutions extends JFrame implements BaseComponent {
         createSpikeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openCreateSpikeDialog();
+                //verify the role selected
+                
+                User user = User.getCurrentUser(null, null);
+                if (user != null && user.getRole()!= null &&
+                     (user.getRole().getName().equals("Scrum Master") || user.getRole().getName().equals("Developer"))) {
+                    openCreateSpikeDialog();
+                }
+                else {
+                    InvalidInputWindow invalidInputWindow = new InvalidInputWindow("Switch to Scrum Master or Developer.", "Warning");
+                    invalidInputWindow.setAlwaysOnTop(true);
+                    invalidInputWindow.setLocationRelativeTo(Solutions.this);
+                    invalidInputWindow.setVisible(true);
+                    SimulationSwitchRolePane switchRolePane = new SimulationSwitchRolePane();
+                    switchRolePane.setVisible(true);
+                    
+                } 
             }
         });
 
@@ -185,7 +202,7 @@ public class Solutions extends JFrame implements BaseComponent {
         _subPanel.repaint();
     }
 
-    private void openCreateSolutionDialog() {
+    private void openCreateSolutionDialog(Solutions solutionWindow) {
         JDialog dialog = new JDialog(this, "Add New Solution", true);
         dialog.setSize(600, 300);
         dialog.setLayout(new GridBagLayout());
@@ -201,6 +218,7 @@ public class Solutions extends JFrame implements BaseComponent {
                     SolutionStore solutionStore = SolutionStore.getInstance();
                     solutionStore.addSolution(newSolution, blocker_id);
                     dialog.dispose();
+                    solutionWindow.dispose();
                     new Solutions(blocker_id).setVisible(true);
                 }
             }

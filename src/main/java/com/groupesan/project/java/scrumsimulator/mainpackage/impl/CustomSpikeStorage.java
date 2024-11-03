@@ -25,5 +25,13 @@ public class CustomSpikeStorage {
     public CustomSpike getCustomSpike(String blockerId) {
         return customSpikeMap.get(blockerId);
     }
+
+    public void deleteCustomSpike(String blockerId) {
+        customSpikeMap.remove(blockerId);
+    }
+
+    public HashMap<String, CustomSpike> getCustomSpikeMap() {
+        return customSpikeMap;
+    }
     
 }

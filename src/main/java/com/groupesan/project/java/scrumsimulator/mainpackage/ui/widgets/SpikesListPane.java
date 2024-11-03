@@ -2,6 +2,11 @@ package com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets;
 
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.BaseComponent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.CustomSpikeStorage;
+import com.groupesan.project.java.scrumsimulator.mainpackage.core.User;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.CustomSpike;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.InvalidInputWindow;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.SimulationSwitchRolePane;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.SimulationUI;
 
 import javax.swing.*;
@@ -10,6 +15,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class SpikesListPane extends JFrame implements BaseComponent {
     private JPanel _subPanel;
@@ -33,44 +41,7 @@ public class SpikesListPane extends JFrame implements BaseComponent {
     
         JPanel myJPanel = new JPanel(new GridBagLayout());
         myJPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
-    
-        // "Enter Your Role" Label
-        JLabel enterRole = new JLabel("Enter Your Role: ");
-        myJPanel.add(
-            enterRole,
-            new CustomConstraints(0, 0, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL)
-        );
 
-        // Role Dropdown
-        JComboBox<String> roleDropdown = new JComboBox<>(new String[]{"Developer", "Scrum Master", "Product Owner"});
-        myJPanel.add(
-            roleDropdown,
-            new CustomConstraints(1, 0, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL)
-        );
-
-        // "Verify Role" Button
-        JButton verifyButton = new JButton("Verify Role");
-
-        verifyButton.addActionListener(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String enteredRole = (String) roleDropdown.getSelectedItem(); 
-                    String selectedRole = simulationUI.getUserRole(); 
-                    
-                    if (enteredRole.equals(selectedRole)) {
-                        JOptionPane.showMessageDialog(null, "Role Verified!");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Role Verification Failed! Please select the correct role.");
-                    }
-                }
-            }
-        );
-
-        myJPanel.add(
-            verifyButton,
-            new CustomConstraints(1, 1, GridBagConstraints.CENTER, 1.0, 0.1, GridBagConstraints.HORIZONTAL)
-        );
 
         // "Choose the Spike to Resolve" Label
         JLabel spikeResolve = new JLabel("Choose the Spike to Resolve: ");
@@ -80,7 +51,18 @@ public class SpikesListPane extends JFrame implements BaseComponent {
         );
 
         // Spike Dropdown
-        JComboBox<String> spikeDropdown = new JComboBox<>(new String[]{"Dummy Spike 1", "Dummy Spike 2", "Dummy Spike 3", "Dummy Spike 4"});
+        CustomSpikeStorage customSpikes = CustomSpikeStorage.getInstance();
+        HashMap <String, CustomSpike> blockerSpike = customSpikes.getCustomSpikeMap();
+        ArrayList<String> spikeList = new ArrayList<>();
+        if (blockerSpike != null && !blockerSpike.isEmpty()) {
+            for (Map.Entry<String, CustomSpike> entry : blockerSpike.entrySet()) {
+                CustomSpike spike = entry.getValue();
+                String blockerId = entry.getKey();
+                spikeList.add(blockerId);
+            }
+        }
+
+        JComboBox<String> spikeDropdown = new JComboBox<>(spikeList.toArray(new String[0]));
         myJPanel.add(
             spikeDropdown,
             new CustomConstraints(1, 2, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL)
@@ -88,7 +70,30 @@ public class SpikesListPane extends JFrame implements BaseComponent {
 
         // "Resolve Spike" Button
         JButton resolveButton = new JButton("Resolve Spike");
-        resolveButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "Spike Resolved!"));
+        resolveButton.addActionListener(e -> {
+            //verify the role
+             User user = User.getCurrentUser(null, null);
+            if (user != null && user.getRole()!= null &&
+                (user.getRole().getName().equals("Scrum Master") || user.getRole().getName().equals("Developer"))) {
+                SpikesListPane.this.dispose(); 
+                JOptionPane.showMessageDialog(null, "Spike Resolved!");
+                CustomSpikeStorage spikeStorage = CustomSpikeStorage.getInstance();
+                String blockerId = (String) spikeDropdown.getSelectedItem();
+                spikeStorage.deleteCustomSpike(blockerId);
+                SpikesListPane window = new SpikesListPane(simulationUI);
+                window.setVisible(true);
+                dispose();                  
+            }
+            else {
+                InvalidInputWindow invalidInputWindow = new InvalidInputWindow("Switch to Scrum Master or Developer.", "Warning");
+                invalidInputWindow.setAlwaysOnTop(true);
+                invalidInputWindow.setLocationRelativeTo(SpikesListPane.this);
+                invalidInputWindow.setVisible(true);
+                SimulationSwitchRolePane switchRolePane = new SimulationSwitchRolePane();
+                switchRolePane.setVisible(true);
+                    
+            } 
+            });
         myJPanel.add(
             resolveButton,
             new CustomConstraints(1, 3, GridBagConstraints.CENTER, 1.0, 0.1, GridBagConstraints.HORIZONTAL)
