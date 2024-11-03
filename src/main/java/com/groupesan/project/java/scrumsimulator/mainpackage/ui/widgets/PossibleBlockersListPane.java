@@ -116,14 +116,7 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
             JMenuItem viewSolitionsOption = new JMenuItem("View Solutions");
             JMenuItem deleteOption = new JMenuItem("Delete");
 
-
-            viewSolitionsOption.addActionListener(e -> {
-
-            JMenuItem viewSolutionsOption = new JMenuItem("View Solutions");
-            JMenuItem deleteOption = new JMenuItem("Delete");
-
             viewSolutionsOption.addActionListener(e -> {
-
                 Solutions solutions = new Solutions(pb.getId());
                 solutions.setVisible(true);
             });
@@ -140,8 +133,9 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
                     .addActionListener(e -> popupMenu.show(solutionListButton, 0, solutionListButton.getHeight()));
 
             _subPanel.add(
-                    solutionListButton,
-                    new CustomConstraints(0, i, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL));
+                solutionListButton,
+                new CustomConstraints(0, i, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL)
+            );
         }
     }
 }
