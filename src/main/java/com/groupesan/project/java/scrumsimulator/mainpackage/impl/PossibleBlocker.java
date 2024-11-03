@@ -8,13 +8,23 @@ public class PossibleBlocker {
     private String description;
     private UserStory userStory;
     private PossibleBlockerState currentState;
+    private int probability;
 
-    public PossibleBlocker(String name, String desc, UserStory userStory){
+    public PossibleBlocker(String name, String desc, int probability)  {
+        this.id = UUID.randomUUID().toString();
+        this.name = name;
+        this.description = desc;
+        this.userStory = null; 
+        this.probability = probability;
+    }
+
+    public PossibleBlocker(String name, String desc, UserStory userStory) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = desc;
         this.userStory = userStory;
         this.currentState = PossibleBlockerState.CREATED;
+        this.probability = 0;
     }
 
     public String getId() {
@@ -29,8 +39,16 @@ public class PossibleBlocker {
         return this.name;
     }
 
-    public UserStory getUserStory(){
+    public UserStory getUserStory() {
         return this.userStory;
+    }
+    
+    public int getProbability() {
+        return this.probability;
+    }
+
+    public String print(){
+        return this.id + " - " + this.name + " - " + this.description + " - " + this.probability;
     }
 
     public void changeBlockerStatus(PossibleBlockerState newStatus){
@@ -48,5 +66,8 @@ public class PossibleBlocker {
 
         return this.name + " - " + this.description;
     }
-}
 
+    public void setProbability(int probability) {
+        this.probability = probability;
+    }
+}
