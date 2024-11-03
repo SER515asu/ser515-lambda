@@ -66,7 +66,7 @@ public class SpikesListPane extends JFrame implements BaseComponent {
                 }
             }
         );
-       
+
         myJPanel.add(
             verifyButton,
             new CustomConstraints(1, 1, GridBagConstraints.CENTER, 1.0, 0.1, GridBagConstraints.HORIZONTAL)

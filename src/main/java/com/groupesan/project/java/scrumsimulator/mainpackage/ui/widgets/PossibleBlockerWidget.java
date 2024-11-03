@@ -63,7 +63,7 @@ public class PossibleBlockerWidget extends JPanel implements BaseComponent {
     public void init() {
         removeAll();        
 
-        id = new JLabel(_possibleBlocker.getId());
+        id = new JLabel(String.valueOf(_possibleBlocker.getId()));
         // id.addMouseListener(openEditDialog);
 
         name = new JLabel(_possibleBlocker.getName());
@@ -72,7 +72,7 @@ public class PossibleBlockerWidget extends JPanel implements BaseComponent {
         desc = new JLabel(_possibleBlocker.getDescription());
         // desc.addMouseListener(openEditDialog);
 
-        probability = new JLabel(_possibleBlocker.getProbability());
+        probability = new JLabel(_possibleBlocker.getProbability() + "%");
         // probability.addMouseListener(openEditDialog);
         
         deleteIcon = new JLabel(
