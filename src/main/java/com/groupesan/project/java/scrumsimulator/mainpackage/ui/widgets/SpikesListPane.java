@@ -50,9 +50,7 @@ public class SpikesListPane extends JFrame implements BaseComponent {
 
         // "Verify Role" Button
         JButton verifyButton = new JButton("Verify Role");
-// <<<<<<< S2_93#112
-//         verifyButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "Role Verified!"));
-// =======
+
         verifyButton.addActionListener(
             new ActionListener() {
                 @Override
@@ -68,7 +66,7 @@ public class SpikesListPane extends JFrame implements BaseComponent {
                 }
             }
         );
-// >>>>>>> S2_#93
+
         myJPanel.add(
             verifyButton,
             new CustomConstraints(1, 1, GridBagConstraints.CENTER, 1.0, 0.1, GridBagConstraints.HORIZONTAL)
