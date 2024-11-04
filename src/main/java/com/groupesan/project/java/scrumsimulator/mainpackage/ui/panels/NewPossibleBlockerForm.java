@@ -21,8 +21,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import java.security.SecureRandom;
+import com.groupesan.project.java.scrumsimulator.mainpackage.core.User;
 
 public class NewPossibleBlockerForm extends JFrame implements BaseComponent {
+    private SecureRandom random = new SecureRandom();
     private JTextField nameField = new JTextField();
     private JTextArea descArea = new JTextArea();
     private JComboBox<UserStory> userStoryComboBox;
@@ -82,7 +85,7 @@ public class NewPossibleBlockerForm extends JFrame implements BaseComponent {
             )
         );
 
-        JLabel probabilityLabel = new JLabel("Probability of Occurrence: ");
+        JLabel probabilityLabel = new JLabel("Probability of Occurrence, max: ");
         myJpanel.add(
             probabilityLabel,
             new CustomConstraints(
@@ -102,6 +105,23 @@ public class NewPossibleBlockerForm extends JFrame implements BaseComponent {
             )
         );
 
+        JLabel probabilityLabel2 = new JLabel("Probability of Occurrence, min: ");
+        myJpanel.add(
+            probabilityLabel2,
+            new CustomConstraints(
+                0, 4, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL
+            )
+        );
+
+        JComboBox<String> probabilityDropdown2 = new JComboBox<>(probabilities);
+        myJpanel.add(
+            probabilityDropdown2,
+            new CustomConstraints(
+                1, 4, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL
+            )
+        );
+
+
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(
                 new ActionListener() {
@@ -119,17 +139,36 @@ public class NewPossibleBlockerForm extends JFrame implements BaseComponent {
                     String name = nameField.getText();
                     String description = descArea.getText();
                     UserStory us = (UserStory) userStoryComboBox.getSelectedItem();
-                    String probabilityStr = (String) probabilityDropdown.getSelectedItem().toString();
-                    int probability = Integer.parseInt(probabilityStr.replace("%", "").trim());
+                    String probabilityStrMax = (String) probabilityDropdown.getSelectedItem().toString();
+                    int probabilityMax = Integer.parseInt(probabilityStrMax.replace("%", "").trim());
+                    String probabilityStrMin = (String) probabilityDropdown2.getSelectedItem().toString();
+                    int probabilityMin = Integer.parseInt(probabilityStrMin.replace("%", "").trim());
                 
-                    if (name.isEmpty() || description.isEmpty() || probabilityStr == null) {
+                    if (name.isEmpty() || description.isEmpty() || probabilityStrMax == null || probabilityStrMin == null) {
                         JOptionPane.showMessageDialog(null, "Please fill in all fields.");
                         return;
                     }
+                    if (probabilityMax < probabilityMin) {
+                        JOptionPane.showMessageDialog(null, "Enter the correct probability range.");
+                    }
 
-                    PossibleBlocker newBlocker = new PossibleBlocker(name, description, us, probability);
-                    PossibleBlockersStore.getInstance().addNewBlocker(newBlocker);
-                    JOptionPane.showMessageDialog(null, "Blocker Submitted!");
+                    //randonly select a probability between the min and max
+                    int probability = (random.nextInt(probabilityMax - probabilityMin + 1) + probabilityMin);
+                    String roleName = "None";
+                    if (User.getCurrentUser(null, null).getRole() != null) {
+                        roleName = User.getCurrentUser(null, null).getRole().getName();
+                    }
+                    System.out.println("current role: " + roleName);
+                    if (roleName.equals("Scrum Master")) {
+                        PossibleBlocker newBlocker = new PossibleBlocker(name, description, us, probability);
+                        PossibleBlockersStore.getInstance().addNewBlocker(newBlocker);
+                        JOptionPane.showMessageDialog(null, "Blocker Submitted!");
+                    }
+                    else {
+                        PossibleBlocker newBlocker = new PossibleBlocker(name, description, us);
+                        PossibleBlockersStore.getInstance().addNewBlocker(newBlocker);
+                        JOptionPane.showMessageDialog(null, "Blocker Submitted! But only Scrum Master can set the probability.");
+                    }
                     dispose(); 
                 }
             }
