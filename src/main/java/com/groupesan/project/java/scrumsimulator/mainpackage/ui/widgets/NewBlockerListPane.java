@@ -87,7 +87,7 @@ public class NewBlockerListPane extends JFrame implements BaseComponent {
                     PossibleBlockersStore.getInstance().addNewBlocker(newBlocker);
                     JOptionPane.showMessageDialog(null, "Blocker Submitted!");
                     dispose(); 
-                    new PossibleBlockersListPane().loadOrReloadSubPanel(); 
+                    // new PossibleBlockersListPane().loadOrReloadSubPanel(); 
                 } else {
                     JOptionPane.showMessageDialog(null, "Please fill in all fields.");
                 }
