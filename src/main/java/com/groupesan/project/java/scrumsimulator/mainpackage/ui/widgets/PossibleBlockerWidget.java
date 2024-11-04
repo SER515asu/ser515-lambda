@@ -15,6 +15,7 @@ public class PossibleBlockerWidget extends JPanel implements BaseComponent {
     private JLabel id;
     private JLabel name;
     private JLabel desc;
+    private JLabel probability;
     private JLabel deleteIcon;
 
     private transient PossibleBlocker _possibleBlocker;
@@ -62,7 +63,7 @@ public class PossibleBlockerWidget extends JPanel implements BaseComponent {
     public void init() {
         removeAll();        
 
-        id = new JLabel(_possibleBlocker.getId());
+        id = new JLabel(String.valueOf(_possibleBlocker.getId()));
         // id.addMouseListener(openEditDialog);
 
         name = new JLabel(_possibleBlocker.getName());
@@ -70,6 +71,9 @@ public class PossibleBlockerWidget extends JPanel implements BaseComponent {
 
         desc = new JLabel(_possibleBlocker.getDescription());
         // desc.addMouseListener(openEditDialog);
+
+        probability = new JLabel(_possibleBlocker.getProbability() + "%");
+        // probability.addMouseListener(openEditDialog);
         
         deleteIcon = new JLabel(
             new ImageIcon(
@@ -104,6 +108,14 @@ public class PossibleBlockerWidget extends JPanel implements BaseComponent {
             desc,
             new CustomConstraints(
                 3, 0, GridBagConstraints.WEST, 
+                0.7, 0.0, GridBagConstraints.HORIZONTAL
+            )
+        );
+
+        add(
+            probability,
+            new CustomConstraints(
+                4, 0, GridBagConstraints.WEST, 
                 0.7, 0.0, GridBagConstraints.HORIZONTAL
             )
         );
