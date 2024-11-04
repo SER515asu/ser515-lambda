@@ -62,20 +62,7 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
                 new CustomConstraints(
                         0, 1, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL));
 
-        JButton fineTuneButton = new JButton("Fine Tune Probabilities");
-        fineTuneButton.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        FineTuneListPane form = new FineTuneListPane();
-                        form.setVisible(true);
-                    }
-                });
-
-        myJPanel.add(
-                fineTuneButton,
-                new CustomConstraints(
-                        0, 2, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL));
+        
 
         setContentPane(myJPanel);
         pack();

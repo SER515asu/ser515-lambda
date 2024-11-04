@@ -38,7 +38,7 @@ public class FineTuneListPane extends JFrame implements BaseComponent {
         JPanel myJPanel = new JPanel(new GridBagLayout());
         myJPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
     
-        // "Enter Your Role" Label
+        /*// "Enter Your Role" Label
         JLabel enterRole = new JLabel("Enter Your Role: ");
         myJPanel.add(
             enterRole,
@@ -58,7 +58,7 @@ public class FineTuneListPane extends JFrame implements BaseComponent {
         myJPanel.add(
             verifyButton,
             new CustomConstraints(1, 1, GridBagConstraints.CENTER, 1.0, 0.1, GridBagConstraints.HORIZONTAL)
-        );
+        );*/
         
         add(myJPanel);   
         setContentPane(myJPanel);
