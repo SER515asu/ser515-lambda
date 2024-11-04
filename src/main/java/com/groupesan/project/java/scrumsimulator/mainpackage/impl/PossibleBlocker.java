@@ -6,7 +6,8 @@ public class PossibleBlocker {
     private String id;
     private String name;
     private String description;
-    private UserStory userStory; 
+    private UserStory userStory;
+    private PossibleBlockerState currentState;
     private int probability;
 
     public PossibleBlocker(String name, String desc, int probability)  {
@@ -22,6 +23,7 @@ public class PossibleBlocker {
         this.name = name;
         this.description = desc;
         this.userStory = userStory;
+        this.currentState = PossibleBlockerState.CREATED;
         this.probability = 0;
     }
 
@@ -47,6 +49,14 @@ public class PossibleBlocker {
 
     public String print(){
         return this.id + " - " + this.name + " - " + this.description + " - " + this.probability;
+    }
+
+    public void changeBlockerStatus(PossibleBlockerState newStatus){
+        this.currentState = newStatus;
+    }
+
+    public PossibleBlockerState getCurrentState(){
+        return this.currentState;
     }
 
     public String print(boolean printId){

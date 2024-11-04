@@ -2,7 +2,10 @@ package com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets;
 
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlocker;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlockerState;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlockersStore;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.NewPossibleBlockerForm;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.utils.StringFormater;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,6 +15,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -48,8 +52,8 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        NewBlockerListPane formb = new NewBlockerListPane();
-                        formb.setVisible(true);
+                        NewPossibleBlockerForm form = new NewPossibleBlockerForm();
+                        form.setVisible(true);
                     }
                 });
 
@@ -93,6 +97,22 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
             JButton solutionListButton = new JButton(buttonText);
 
             JPopupMenu popupMenu = new JPopupMenu();
+
+            JMenu changeState = new JMenu("Change State");
+            for(PossibleBlockerState pbs: PossibleBlockerState.values()){
+                JMenuItem state = new JMenuItem(StringFormater.snakeCaseConverter(pbs.toString()));
+                state.setEnabled(pb.getCurrentState() != pbs);
+
+                state.addActionListener(e -> {
+                    pb.changeBlockerStatus(pbs);
+                    loadOrReloadSubPanel();
+                });
+
+                changeState.add(state);
+            }
+
+            popupMenu.add(changeState);
+
             JMenuItem viewSolutionsOption = new JMenuItem("View Solutions");
             JMenuItem deleteOption = new JMenuItem("Delete");
 
@@ -113,8 +133,9 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
                     .addActionListener(e -> popupMenu.show(solutionListButton, 0, solutionListButton.getHeight()));
 
             _subPanel.add(
-                    solutionListButton,
-                    new CustomConstraints(0, i, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL));
+                solutionListButton,
+                new CustomConstraints(0, i, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL)
+            );
         }
     }
 }

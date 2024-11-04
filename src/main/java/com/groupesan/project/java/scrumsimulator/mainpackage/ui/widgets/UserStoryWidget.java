@@ -1,5 +1,6 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets;
 
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlockerState;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlockersStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStoryStore;
@@ -30,6 +31,10 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     MouseAdapter openEditDialog = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
+            if(_userStoryHasBlocker){
+                return;
+            }
+
             EditUserStoryForm form = new EditUserStoryForm(userStory);
             form.setVisible(true);
 
@@ -47,6 +52,10 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     MouseAdapter deleteUserStory = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
+            if(_userStoryHasBlocker){
+                return;
+            }
+            
             UserStoryStore.getInstance().deleteUserStory(userStory);
             _userStoryListPane.reloadUserStoryPannel();
         }
@@ -66,7 +75,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     public void init() {
         removeAll();      
         
-        _userStoryHasBlocker = PossibleBlockersStore.getInstance().checkUserStoryHasAnyBlockers(userStory);
+        _userStoryHasBlocker = PossibleBlockersStore.getInstance().checkUserStoryWithBlockerState(userStory, PossibleBlockerState.IN_PROGRESS);
 
         if(_userStoryHasBlocker){
             setBackground(Color.RED);
@@ -94,10 +103,6 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
                 ).getImage().getScaledInstance(14, 14, Image.SCALE_SMOOTH)
             )
         );
-
-        if(!_userStoryHasBlocker){
-            deleteOrProhibitedIcon.addMouseListener(deleteUserStory);
-        }
 
         GridBagLayout myGridBagLayout = new GridBagLayout();
         setLayout(myGridBagLayout);
