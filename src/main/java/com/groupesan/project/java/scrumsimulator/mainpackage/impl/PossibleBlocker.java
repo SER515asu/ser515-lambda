@@ -10,21 +10,21 @@ public class PossibleBlocker {
     private PossibleBlockerState currentState;
     private int probability;
 
-    public PossibleBlocker(String name, String desc, int probability)  {
+    public PossibleBlocker(String name, String desc, UserStory userStory)  {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = desc;
         this.userStory = null; 
-        this.probability = probability;
+        this.probability = 0;
     }
 
-    public PossibleBlocker(String name, String desc, UserStory userStory) {
+    public PossibleBlocker(String name, String desc, UserStory userStory, int probability) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = desc;
         this.userStory = userStory;
         this.currentState = PossibleBlockerState.CREATED;
-        this.probability = 0;
+        this.probability = probability;
     }
 
     public String getId() {
