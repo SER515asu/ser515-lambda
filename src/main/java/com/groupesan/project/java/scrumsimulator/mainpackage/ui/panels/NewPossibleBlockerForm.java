@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -75,12 +76,33 @@ public class NewPossibleBlockerForm extends JFrame implements BaseComponent {
                 new CustomConstraints(
                         0, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
         myJpanel.add(
-                userStoryComboBox,
-                new CustomConstraints(
-                        1, 2, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+            userStoryComboBox,
+            new CustomConstraints(
+                1, 2, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL
+            )
+        );
+
+        JLabel probabilityLabel = new JLabel("Probability of Occurrence: ");
+        myJpanel.add(
+            probabilityLabel,
+            new CustomConstraints(
+                0, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL
+            )
+        );
+
+        String[] probabilities = new String[101];
+        for (int i = 0; i <= 100; i++) {
+            probabilities[i] = i + "%";
+        }
+        JComboBox<String> probabilityDropdown = new JComboBox<>(probabilities);
+        myJpanel.add(
+            probabilityDropdown,
+            new CustomConstraints(
+                1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL
+            )
+        );
 
         JButton cancelButton = new JButton("Cancel");
-
         cancelButton.addActionListener(
                 new ActionListener() {
                     @Override
@@ -90,7 +112,6 @@ public class NewPossibleBlockerForm extends JFrame implements BaseComponent {
                 });
 
         JButton submitButton = new JButton("Create");
-
         submitButton.addActionListener(
             new ActionListener() {
                 @Override
@@ -98,22 +119,29 @@ public class NewPossibleBlockerForm extends JFrame implements BaseComponent {
                     String name = nameField.getText();
                     String description = descArea.getText();
                     UserStory us = (UserStory) userStoryComboBox.getSelectedItem();
-                    
-                    PossibleBlockersStore.getInstance().addNewBlocker(
-                        new PossibleBlocker(name, description, us)
-                    );
+                    String probabilityStr = (String) probabilityDropdown.getSelectedItem().toString();
+                    int probability = Integer.parseInt(probabilityStr.replace("%", "").trim());
+                
+                    if (name.isEmpty() || description.isEmpty() || probabilityStr == null) {
+                        JOptionPane.showMessageDialog(null, "Please fill in all fields.");
+                        return;
+                    }
 
-                    dispose();
+                    PossibleBlocker newBlocker = new PossibleBlocker(name, description, us, probability);
+                    PossibleBlockersStore.getInstance().addNewBlocker(newBlocker);
+                    JOptionPane.showMessageDialog(null, "Blocker Submitted!");
+                    dispose(); 
                 }
             }
         );
 
         myJpanel.add(
                 cancelButton,
-                new CustomConstraints(0, 3, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new CustomConstraints(6, 5, GridBagConstraints.EAST, GridBagConstraints.NONE));
+
         myJpanel.add(
                 submitButton,
-                new CustomConstraints(1, 3, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new CustomConstraints(5, 5, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         add(myJpanel);
     }
