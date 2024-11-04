@@ -14,7 +14,7 @@ public class PossibleBlocker {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = desc;
-        this.userStory = null; 
+        this.userStory = userStory; 
         this.probability = 0;
     }
 
