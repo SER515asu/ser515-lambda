@@ -1,7 +1,7 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
-import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlocker;
-import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlockersStore;
+// import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlocker;
+// import com.groupesan.project.java.scrumsimulator.mainpackage.impl.PossibleBlockersStore;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -17,7 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class NewBlockerListPane extends JFrame implements BaseComponent {
-    private JPanel _subPanel;
+    // private JPanel _subPanel;
 
     public NewBlockerListPane() {
         this.init();
@@ -82,12 +82,12 @@ public class NewBlockerListPane extends JFrame implements BaseComponent {
                 String probabilityStr = (String) probabilityDropdown.getSelectedItem();
                 
                 if (!name.isEmpty() && !description.isEmpty() && probabilityStr != null) {
-                    int probability = Integer.parseInt(probabilityStr.replace("%", "").trim());
-                    PossibleBlocker newBlocker = new PossibleBlocker(name, description, probability);
-                    PossibleBlockersStore.getInstance().addNewBlocker(newBlocker);
+                    // int probability = Integer.parseInt(probabilityStr.replace("%", "").trim());
+                    // PossibleBlocker newBlocker = new PossibleBlocker(name, description, probability);
+                    // PossibleBlockersStore.getInstance().addNewBlocker(newBlocker);
                     JOptionPane.showMessageDialog(null, "Blocker Submitted!");
                     dispose(); 
-                    new PossibleBlockersListPane().loadOrReloadSubPanel(); 
+                    // new PossibleBlockersListPane().loadOrReloadSubPanel(); 
                 } else {
                     JOptionPane.showMessageDialog(null, "Please fill in all fields.");
                 }

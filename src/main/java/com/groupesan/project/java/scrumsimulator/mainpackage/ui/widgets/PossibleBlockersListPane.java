@@ -83,8 +83,8 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
         setVisible(true);
     }
 
-    public void loadOrReloadSubPanel() {
-        if (_subPanel == null) {
+    private void loadOrReloadSubPanel(){
+        if(_subPanel == null){
             return;
         }
 
@@ -93,8 +93,8 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
         List<PossibleBlocker> blockers = PossibleBlockersStore.getInstance().getListOfPossibleBlockers();
         for (int i = 0; i < blockers.size(); i++) {
             PossibleBlocker pb = blockers.get(i);
-            String buttonText = pb.getName() + " - " + pb.getDescription() + " - " + pb.getProbability() + "%";
-            JButton solutionListButton = new JButton(buttonText);
+
+            JButton solutionListButton = new JButton(pb.print(false) + " - " + pb.getProbability() + "%");
 
             JPopupMenu popupMenu = new JPopupMenu();
 
@@ -129,13 +129,17 @@ public class PossibleBlockersListPane extends JFrame implements BaseComponent {
             popupMenu.add(viewSolutionsOption);
             popupMenu.add(deleteOption);
 
-            solutionListButton
-                    .addActionListener(e -> popupMenu.show(solutionListButton, 0, solutionListButton.getHeight()));
+            solutionListButton.addActionListener(e -> popupMenu.show(solutionListButton, 0, solutionListButton.getHeight()));
 
             _subPanel.add(
                 solutionListButton,
-                new CustomConstraints(0, i, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL)
+                new CustomConstraints(
+                    0, i, GridBagConstraints.WEST, 1.0, 0.1, GridBagConstraints.HORIZONTAL
+                )
             );
         }
+
+        _subPanel.revalidate();
+        _subPanel.repaint();
     }
 }
